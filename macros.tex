@@ -1,0 +1,87 @@
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{gensymb}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+\usepackage{placeins}
+\usepackage[outputdir=../]{minted}
+\usepackage{caption}
+\usepackage{luacode}
+\usepackage{mathrsfs}
+% https://tex.stackexchange.com/questions/2291/how-do-i-change-the-enumerate-list-format-to-use-letters-instead-of-the-defaul
+% \usepackage{enumitem}
+\usepackage[shortlabels]{enumitem}
+\usepackage{setspace}
+
+\usetikzlibrary{automata}
+\usetikzlibrary{positioning}
+\usetikzlibrary{patterns}
+\usetikzlibrary{calc}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{decorations.markings}
+
+\def\therefore{\boldsymbol{\text{ }
+\leavevmode
+\lower0.4ex\hbox{$\cdot$}
+\kern-.5em\raise0.7ex\hbox{$\cdot$}
+\kern-0.55em\lower0.4ex\hbox{$\cdot$}
+\thinspace\text{ }}}
+
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+% \newcommand{\derivx}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+\newcommand{\derivp}[3]{\frac{\mathrm{d} #1}{\mathrm{d} #2} \left\lparen#3\right\rparen}
+\newcommand{\pderivp}[3]{\frac{\partial #1}{\partial #2} \left\lparen#3\right\rparen}
+\newcommand{\deriv}[2]{\frac{\mathrm{d} #1}{\mathrm{d} #2}}
+\newcommand{\pderiv}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\indefinteg}[2]{\int #1 \, \mathrm{d} #2}
+\newcommand{\evalat}[2]{\left. #2 \right\rvert_{#1}}
+\newcommand{\evalover}[3]{\left. #3 \right\rvert_{#1}^{#2}}
+\newcommand{\dx}[1]{\mathrm{d} #1}
+\newcommand{\solution}{\textbf{\large Solution:}}
+% \newcommand{\solution}{\textbf{\large Solution:}\pagebreak}
+\newcommand{\step}[1]{H(#1)}
+\newcommand{\dirac}[1]{\delta(#1)}
+\newcommand{\laplace}[1]{\mathscr{L}\left\lbrace #1 \right\rbrace}
+\newcommand{\ilaplace}[1]{\mathscr{L}^{-1}\left\lbrace #1 \right\rbrace}
+\newcommand{\limit}[3]{\lim_{#1 \to #2}\left\lparen #3 \right\rparen}
+% \newcommand{\E}{\mathrm{E}}
+% \newcommand{\Var}{\mathrm{Var}}
+% \newcommand{\Cov}{\mathrm{Cov}}
+% \newcommand{\Bias}{\mathrm{Bias}}
+
+% https://tex.stackexchange.com/questions/289949/defining-tg-so-it-behaves-exactly-like-sin-and-cos
+\DeclareMathOperator{\sgn}{sgn}
+
+% https://tex.stackexchange.com/questions/254044/caption-and-label-on-minted-code
+\newenvironment{code}{\captionsetup{type=listing}}{}
+% \SetupFloatingEnvironment{listing}{name=Source Code}
+
+\newenvironment{hint}
+    {\begin{quote}\small\itshape \textbf{Hint:} \setstretch{1.5}}
+    {\end{quote}}
+
+% https://tex.stackexchange.com/questions/538603/automatically-add-parentheses-to-cos-sin-log-ecc-allowing-subscripts
+\begin{luacode}
+function add_parens ( s )
+  ll= { "sin" , "cos" , "tan" , "cot", "sgn" }
+  for i=1,#ll do
+    s = s:gsub ( "(\\"..ll[i]..")%s+(%a+)"   , "%1(%2)" ) -- \sin x
+    s = s:gsub ( "(\\"..ll[i]..")%s-(\\%a+)" , "%1(%2)" ) -- \cos\alpha
+    s = s:gsub ( "(\\"..ll[i]..")%s-(%b{})"  , "%1(%2)" ) -- \tan{y}
+    s = s:gsub ( "(\\"..ll[i]..")%s-(^%s-%w)%s-(\\?%a+)"  , "%1%2(%3)" ) -- \sin^2 z 
+    s = s:gsub ( "(\\"..ll[i]..")%s-(^%s-%w)%s-(%b{})"    , "%1%2(%3)" ) -- \sin^3 {u}
+    s = s:gsub ( "(\\"..ll[i]..")%s-(^%s-%b{})%s-(\\?%a+)", "%1%2(%3)" ) -- \cos ^{2} \pi
+    s = s:gsub ( "(\\"..ll[i]..")%s-(^%s-%b{})%s-(%b{})"  , "%1%2(%3)" ) -- \cos ^{10} {v}
+  end  
+  return s
+end
+\end{luacode}
+\newcommand\AddParensOn{\directlua{ luatexbase.add_to_callback 
+  ( "process_input_buffer" , add_parens , "AddParens" )}}
+\newcommand\AddParensOff{\directlua{ luatexbase.remove_from_callback 
+  ( "process_input_buffer" , "AddParens" )}}
