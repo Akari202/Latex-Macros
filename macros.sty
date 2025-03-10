@@ -9,6 +9,8 @@
 \RequirePackage{mathtools}
 \RequirePackage{gensymb}
 \RequirePackage{tikz}
+\usepackage{tikz}
+\usepackage{pgfplots}
 \RequirePackage[plain]{algorithm}
 \RequirePackage{algpseudocode}
 \RequirePackage{placeins}
@@ -19,6 +21,8 @@
 % https://tex.stackexchange.com/questions/2291/how-do-i-change-the-enumerate-list-format-to-use-letters-instead-of-the-defaul
 \RequirePackage[shortlabels]{enumitem}
 \RequirePackage{setspace}
+
+\pgfplotsset{compat=1.18}
 
 \usetikzlibrary{automata}
 \usetikzlibrary{positioning}
@@ -40,7 +44,11 @@
 \newcommand{\pderivp}[3]{\frac{\partial #1}{\partial #2} \left\lparen#3\right\rparen}
 \newcommand{\deriv}[2]{\frac{\mathrm{d} #1}{\mathrm{d} #2}}
 \newcommand{\pderiv}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\pderivn}[3]{\frac{\partial^{#1} #2}{\partial #3^{#1}}}
 \newcommand{\indefinteg}[2]{\int #1 \, \mathrm{d} #2}
+\newcommand{\indefintegp}[2]{\int \left( #1 \right) \, \mathrm{d} #2}
+\newcommand{\definteg}[4]{\int_{#1}^{#2} #3 \mathrm{d} #4}
+% https://tex.stackexchange.com/questions/40160/math-symbol-question-vertical-bar-for-evaluated-at
 \newcommand{\evalat}[2]{\left. #2 \right\rvert_{#1}}
 \newcommand{\evalover}[3]{\left. #3 \right\rvert_{#1}^{#2}}
 \newcommand{\dx}[1]{\mathrm{d} #1}
@@ -51,6 +59,8 @@
 \newcommand{\laplace}[1]{\mathscr{L}\left\lbrace #1 \right\rbrace}
 \newcommand{\ilaplace}[1]{\mathscr{L}^{-1}\left\lbrace #1 \right\rbrace}
 \newcommand{\limit}[3]{\lim_{#1 \to #2}\left\lparen #3 \right\rparen}
+\newcommand{\abs}[1]{\left| #1 \right|}
+\renewcommand{\det}[1]{\left\lvert #1 \right\rvert}
 % \newcommand{\E}{\mathrm{E}}
 % \newcommand{\Var}{\mathrm{Var}}
 % \newcommand{\Cov}{\mathrm{Cov}}
@@ -69,21 +79,21 @@
 
 % https://tex.stackexchange.com/questions/538603/automatically-add-parentheses-to-cos-sin-log-ecc-allowing-subscripts
 \begin{luacode}
-function add_parens ( s )
-  ll= { "sin" , "cos" , "tan" , "cot", "sgn" }
-  for i=1,#ll do
-    s = s:gsub ( "(\\"..ll[i]..")%s+(%a+)"   , "%1(%2)" ) -- \sin x
-    s = s:gsub ( "(\\"..ll[i]..")%s-(\\%a+)" , "%1(%2)" ) -- \cos\alpha
-    s = s:gsub ( "(\\"..ll[i]..")%s-(%b{})"  , "%1(%2)" ) -- \tan{y}
-    s = s:gsub ( "(\\"..ll[i]..")%s-(^%s-%w)%s-(\\?%a+)"  , "%1%2(%3)" ) -- \sin^2 z 
-    s = s:gsub ( "(\\"..ll[i]..")%s-(^%s-%w)%s-(%b{})"    , "%1%2(%3)" ) -- \sin^3 {u}
-    s = s:gsub ( "(\\"..ll[i]..")%s-(^%s-%b{})%s-(\\?%a+)", "%1%2(%3)" ) -- \cos ^{2} \pi
-    s = s:gsub ( "(\\"..ll[i]..")%s-(^%s-%b{})%s-(%b{})"  , "%1%2(%3)" ) -- \cos ^{10} {v}
-  end  
+function add_parens(s)
+  local functions = { "sin", "cos", "tan", "cot", "sgn" }
+  for i = 1, #functions do
+    local func = "\\" .. functions[i]
+    -- Match the function followed by a balanced pair of braces or a complex nested argument
+    s = s:gsub("(" .. func .. ")%s*(%b{})", "%1%2") -- Handle cases like \sin{...}
+    s = s:gsub("(" .. func .. ")%s*(\\?%w+)", "%1(%2)") -- Handle single variables or commands like \alpha
+    -- Handle superscripts and nested arguments
+    s = s:gsub("(" .. func .. ")%s*(%^%s*[%w{}]+)%s*(\\?%w+)", "%1%2(%3)")
+    s = s:gsub("(" .. func .. ")%s*(%^%s*[%w{}]+)%s*(%b{})", "%1%2(%3)")
+  end
   return s
 end
 \end{luacode}
-\newcommand\AddParensOn{\directlua{ luatexbase.add_to_callback 
+\newcommand\AddParensOn{\directlua{ luatexbase.add_to_callback
   ( "process_input_buffer" , add_parens , "AddParens" )}}
-\newcommand\AddParensOff{\directlua{ luatexbase.remove_from_callback 
+\newcommand\AddParensOff{\directlua{ luatexbase.remove_from_callback
   ( "process_input_buffer" , "AddParens" )}}
