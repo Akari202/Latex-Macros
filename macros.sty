@@ -9,8 +9,8 @@
 \RequirePackage{mathtools}
 \RequirePackage{gensymb}
 \RequirePackage{tikz}
-\usepackage{tikz}
-\usepackage{pgfplots}
+\RequirePackage{tikz}
+\RequirePackage{pgfplots}
 \RequirePackage[plain]{algorithm}
 \RequirePackage{algpseudocode}
 \RequirePackage{placeins}
@@ -24,12 +24,28 @@
 \RequirePackage{lscape}
 \RequirePackage{coffeestains}
 \RequirePackage{graphicx}
+\RequirePackage{caption}
 \RequirePackage{subcaption}
+\RequirePackage[acronym]{glossaries}
 \RequirePackage{mwe}
 % https://tex.stackexchange.com/questions/196481/problem-on-subfigure-2x2
 \RequirePackage{mwe}
 \RequirePackage{hyperref}
 \RequirePackage{url}
+\RequirePackage{doi}
+\RequirePackage[
+  backend=biber,
+  style=alphabetic,
+  sorting=ynt
+]{biblatex}
+\RequirePackage{lscape}
+\RequirePackage{layouts}
+\RequirePackage{newverbs}
+\RequirePackage{xcolor}
+\RequirePackage{fancyvrb}
+\RequirePackage{tcolorbox}
+\RequirePackage[affil-it]{authblk}
+\RequirePackage{titling}
 
 \pgfplotsset{compat=1.18}
 
@@ -41,16 +57,18 @@
 \usetikzlibrary{decorations.markings}
 
 \def\therefore{\boldsymbol{\text{ }
-\leavevmode
-\lower0.4ex\hbox{$\cdot$}
-\kern-.5em\raise0.7ex\hbox{$\cdot$}
-\kern-0.55em\lower0.4ex\hbox{$\cdot$}
+    \leavevmode
+    \lower0.4ex\hbox{$\cdot$}
+    \kern-.5em\raise0.7ex\hbox{$\cdot$}
+    \kern-0.55em\lower0.4ex\hbox{$\cdot$}
 \thinspace\text{ }}}
 
 \newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
 % \newcommand{\derivx}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
-\newcommand{\derivp}[3]{\frac{\mathrm{d} #1}{\mathrm{d} #2} \left\lparen#3\right\rparen}
-\newcommand{\pderivp}[3]{\frac{\partial #1}{\partial #2} \left\lparen#3\right\rparen}
+\newcommand{\derivp}[3]{\frac{\mathrm{d} #1}{\mathrm{d} #2}
+\left\lparen#3\right\rparen}
+\newcommand{\pderivp}[3]{\frac{\partial #1}{\partial #2}
+\left\lparen#3\right\rparen}
 \newcommand{\deriv}[2]{\frac{\mathrm{d} #1}{\mathrm{d} #2}}
 \newcommand{\pderiv}[2]{\frac{\partial #1}{\partial #2}}
 \newcommand{\pderivn}[3]{\frac{\partial^{#1} #2}{\partial #3^{#1}}}
@@ -61,8 +79,6 @@
 \newcommand{\evalat}[2]{\left. #2 \right\rvert_{#1}}
 \newcommand{\evalover}[3]{\left. #3 \right\rvert_{#1}^{#2}}
 \newcommand{\dx}[1]{\mathrm{d} #1}
-\newcommand{\solution}{\textbf{\large Solution:}}
-% \newcommand{\solution}{\textbf{\large Solution:}\pagebreak}
 \newcommand{\step}[1]{H(#1)}
 \newcommand{\dirac}[1]{\delta(#1)}
 \newcommand{\laplace}[1]{\mathscr{L}\left\lbrace #1 \right\rbrace}
@@ -82,27 +98,94 @@
 \newenvironment{code}{\captionsetup{type=listing}}{}
 % \SetupFloatingEnvironment{listing}{name=Source Code}
 
-\newenvironment{hint}
-    {\begin{quote}\small\itshape \textbf{Hint:} \setstretch{1.5}}
-    {\end{quote}}
+% https://tex.stackexchange.com/questions/141100/getting-verbatim-with-soft-grey-background-as-in-tex-stackexchange
+\definecolor{cverbbg}{gray}{0.93}
+% \newenvironment{cverbatim}
+% {
+%   \begin{tcolorbox}[
+%       boxrule=0.5pt,
+%       colback=white,
+%       fontupper={
+%         \small
+%         \setstretch{1.5}
+%         \par
+%       }
+%     ]
+%     \textbf{Example:}\\
+%     % \SaveVerbatim{cverb}
+%   }{
+%     % \endSaveVerbatim
+%     % \flushleft
+%     % \fboxrule=0pt
+%     % \fboxsep=.5em
+%     % \colorbox{cverbbg}{
+%     %   \BUseVerbatim{cverb}
+%     % }
+%     % \endflushleft
+%   \end{tcolorbox}
+% }
+% \newenvironment{lcverbatim}
+% {\SaveVerbatim{cverb}}
+% {\endSaveVerbatim
+%   \flushleft\fboxrule=0pt\fboxsep=.5em
+%   \colorbox{cverbbg}{%
+%     \makebox[\dimexpr\linewidth-2\fboxsep][l]{\BUseVerbatim{cverb}}%
+%   }
+%   \endflushleft
+% }
+\newcommand{\ilcode}[1]{\colorbox{cverbbg}{\texttt{#1}}}
+\newcommand{\cilcode}[1]{
+  \begin{center}
+    \ilcode{#1}
+  \end{center}
+}
+% \newcommand{\cverb}[1]
+% {\setbox\verbbox\hbox\bgroup}
+% {\egroup\colorbox{cverbbg}{\box\verbbox}}
+
+\newenvironment{hint}{
+  \begin{quote}\small\itshape \textbf{Hint:} \setstretch{1.5}
+  }{
+  \end{quote}
+}
+\newenvironment{example}{
+  \begin{quote}
+    \begin{tcolorbox}[
+        boxrule=0.5pt,
+        colback=white,
+        fontupper={
+          \small
+          \setstretch{1.5}
+          \par
+        }
+      ]
+      \textbf{Example:}\\
+    }{
+    \end{tcolorbox}
+  \end{quote}
+}
+\newcommand{\solution}{\textbf{\large Solution:}}
+% \newcommand{\solution}{\textbf{\large Solution:}\pagebreak}
 
 % https://tex.stackexchange.com/questions/538603/automatically-add-parentheses-to-cos-sin-log-ecc-allowing-subscripts
 \begin{luacode}
-function add_parens(s)
+  function add_parens(s)
   local functions = { "sin", "cos", "tan", "cot", "sgn" }
   for i = 1, #functions do
-    local func = "\\" .. functions[i]
-    -- Match the function followed by a balanced pair of braces or a complex nested argument
-    s = s:gsub("(" .. func .. ")%s*(%b{})", "%1%2") -- Handle cases like \sin{...}
-    s = s:gsub("(" .. func .. ")%s*(\\?%w+)", "%1(%2)") -- Handle single variables or commands like \alpha
-    -- Handle superscripts and nested arguments
-    s = s:gsub("(" .. func .. ")%s*(%^%s*[%w{}]+)%s*(\\?%w+)", "%1%2(%3)")
-    s = s:gsub("(" .. func .. ")%s*(%^%s*[%w{}]+)%s*(%b{})", "%1%2(%3)")
-  end
-  return s
-end
-\end{luacode}
-\newcommand\AddParensOn{\directlua{ luatexbase.add_to_callback
-  ( "process_input_buffer" , add_parens , "AddParens" )}}
-\newcommand\AddParensOff{\directlua{ luatexbase.remove_from_callback
-  ( "process_input_buffer" , "AddParens" )}}
+  local func = "\\" .. functions[i]
+  -- Match the function followed by a balanced pair of braces or a
+  complex nested argument
+  s = s:gsub("(" .. func .. ")%s*(%b{})", "%1%2") -- Handle cases like \sin{...}
+    s = s:gsub("(" .. func .. ")%s*(\\?%w+)", "%1(%2)") -- Handle
+      % single variables or commands like \alpha
+      -- Handle superscripts and nested arguments
+      s = s:gsub("(" .. func .. ")%s*(%^%s*[%w{}]+)%s*(\\?%w+)", "%1%2(%3)")
+        s = s:gsub("(" .. func .. ")%s*(%^%s*[%w{}]+)%s*(%b{})", "%1%2(%3)")
+          end
+          return s
+          end
+        \end{luacode}
+        \newcommand\AddParensOn{\directlua{ luatexbase.add_to_callback
+        ( "process_input_buffer" , add_parens , "AddParens" )}}
+        \newcommand\AddParensOff{\directlua{ luatexbase.remove_from_callback
+        ( "process_input_buffer" , "AddParens" )}}
