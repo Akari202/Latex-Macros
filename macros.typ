@@ -1,7 +1,6 @@
-
 #let author = "Akari Harada"
-#let course = "ME 326"
-#let title = "Fluid Dynamics"
+#let course = "ME 000"
+#let title = "Placeholder Class Title"
 
 #let sgn = $op("sgn")$
 #let step(x) = $H(#x)$
@@ -127,7 +126,7 @@
   ]
 
   pagebreak()
-  body
+  setup(body)
 }
 
 #let setup(body) = {
@@ -238,4 +237,106 @@
   )
 
   body
+}
+
+#let minimal_setup(body) = {
+  set page(
+    paper: "us-letter",
+    margin: (x: 0.25in, y: 0.25in),
+  )
+
+  set text(
+    font: "New Computer Modern",
+    size: 11pt,
+  )
+
+  set par(
+    leading: 1.5em,
+    justify: true,
+    first-line-indent: 0pt,
+  )
+
+  body
+}
+
+#let calendar(year: 1970, month: 1, show_day_names: true, height: 5.25in) = {
+  let month_date = datetime(
+    year: year,
+    month: month,
+    day: 1,
+  )
+
+  let monthly_days = ()
+
+  for day in range(0, 31) [
+    #let month_accumulator = (month_date + duration(days: day))
+    #if month_accumulator.month() != month {
+      break
+    }
+    #monthly_days.push(month_accumulator)
+  ]
+
+  let first_monday = {
+    int(monthly_days.first().display("[weekday repr:monday]"))
+  }
+
+  let total_cells = 42
+  let used_cells = first_monday - 1 + monthly_days.len()
+
+  let size_name(body) = layout(size => {
+    context {
+      let width = measure([Wednesday]).width
+      let target = size.width
+
+      let ratio = (target / width) * 100%
+      scale(ratio, reflow: true, body)
+    }
+  })
+
+  box(
+    height: 100% - 16pt,
+    stack(
+      spacing: 5pt,
+      align(left)[= #month_date.display("[month repr:long]") #year],
+      table(
+        columns: 7,
+        rows: (auto,) + (1fr,) * 6,
+        stroke: (x, y) => {
+          if y == 0 {
+            none
+          } else {
+            let cell_index = (y - 1) * 7 + x
+            let start = first_monday - 1
+            let end = start + monthly_days.len()
+
+            if start <= cell_index and cell_index < end {
+              (thickness: 0.5pt)
+            } else {
+              none
+            }
+          }
+        },
+        align: (x, y) => if y == 0 {
+          center + horizon
+        } else {
+          top + right
+        },
+        table.header(
+          size_name[Monday],
+          size_name[Tuesday],
+          size_name[Wednesday],
+          size_name[Thursday],
+          size_name[Friday],
+          size_name[Saturday],
+          size_name[Sunday],
+        ),
+        ..range(1, first_monday).map(_ => []),
+        ..monthly_days.map(day => box(
+          inset: 1pt,
+          text(size: height * 1.75%, day.display("[day]")),
+        )),
+        ..range(0, total_cells - used_cells).map(_ => []),
+      ),
+    ),
+  )
 }
