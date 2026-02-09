@@ -1,6 +1,11 @@
+// Drawing: https://typst.app/universe/package/cetz
+// Diagrams: https://typst.app/universe/package/fletcher
+// Mechanical Systems: https://github.com/34j/typst-cetz-mechanical-system
+// Number Formatting: https://typst.app/universe/package/zero
+//
+// Obsidian Formatting: https://github.com/k0src/Typsidian/
+
 #let author = "Akari Harada"
-#let course = "ME 000"
-#let title = "Placeholder Class Title"
 
 #let sgn = $op("sgn")$
 #let step(x) = $H(#x)$
@@ -32,22 +37,9 @@
 #let div = $nabla dot$
 #let laplace_op = $nabla^2$
 
+// typst compile ./file.typ --input solutions=false
 #let show-solutions = sys.inputs.at("solutions", default: "true") == "true"
 #let is-homework = true
-
-#let example(body) = {
-  block(
-    width: 100%,
-    stroke: 0.5pt,
-    inset: 1em,
-    fill: white,
-    radius: 2pt,
-  )[
-    #text(weight: "bold")[Example:] \
-    #set text(size: 0.9em)
-    #body
-  ]
-}
 
 #let ilcode(it) = box(
   fill: gray.lighten(80%),
@@ -95,55 +87,81 @@
 }
 
 #let hint(body) = {
-  set text(size: 0.9em, style: "italic")
-  pad(x: 1em, top: 0.5em, bottom: 0.5em)[
-    *Hint:* #body
+  pad(x: 2em, top: 0.5em, bottom: 0.5em)[
+    #text(size: 0.85em)[
+      #emph[#strong[Hint:] #body]
+    ]
   ]
 }
 
-#let homework(
-  title: "",
-  course-number: "",
-  course: "",
-  instructor: "",
-  time: "",
-  due-date: "",
-  body,
-) = {
-  is-homework = true
-
-  align(center + horizon)[
-    #v(1in)
-    #text(weight: "bold", size: 1.5em)[#course-number \ #course \ #title] \
-    #v(0.1in)
-    #text(size: 10pt)[Due on #due-date] \
-    #v(0.1in)
-    #text(style: "italic", size: 1.2em)[#instructor \ #time]
-    #v(3in)
-    #author \
-    #datetime.today().display("[month repr:long] [day], [year]")
-    #metadata("title") <titlepage>
+#let example(body) = {
+  block(
+    width: 100%,
+    stroke: 0.5pt,
+    inset: 1em,
+    fill: white,
+    radius: 2pt,
+  )[
+    #text(size: 0.85em)[
+      #strong[Example:] #body
+    ]
   ]
-
-  pagebreak()
-  setup(body)
 }
 
-#let setup(body) = {
+#let minimal_setup(title: none, margin: (x: 1in, y: 1in), body) = {
+  if title != none {
+    set document(
+      title: title,
+      author: author,
+    )
+  } else {
+    set document(
+      author: author,
+    )
+  }
+
   set page(
     paper: "us-letter",
-    margin: (x: 1in, y: 1in),
+    margin: margin,
+  )
+
+  set text(
+    font: "New Computer Modern",
+    size: 11pt,
+  )
+
+  set par(
+    leading: 1.5em,
+    justify: true,
+    first-line-indent: 0pt,
+  )
+
+  show heading: set block(
+    above: 1.5em,
+    below: 2em,
+  )
+
+  show math.equation: set block(
+    above: 1.7em,
+    below: 1.7em,
+  )
+
+  body
+}
+
+#let setup(title: none, header-center: [], body) = {
+  show: minimal_setup.with()
+
+  set page(
     header-ascent: 25%,
     footer-descent: 25%,
     header: context {
-      let title-pages = query(selector(<titlepage>).before(here()))
       let page-num = here().page()
 
-      if page-num == 1 and title-pages.len() > 0 { return }
+      if page-num == 1 { return }
 
       set text(size: 10pt)
 
-      let header-center = [#course: #title]
       let header-right = []
 
       let current_page = here().page()
@@ -182,7 +200,12 @@
       let title-pages = query(selector(<titlepage>).before(here()))
       let page-num = here().page()
 
-      if page-num == 1 and title-pages.len() > 0 { return }
+      if page-num == 1 and title-pages.len() > 0 {
+        return [
+          #v(-8pt)
+          #align(center, [#page-num])
+        ]
+      }
 
       set text(size: 10pt)
 
@@ -225,39 +248,45 @@
     },
   )
 
-  set text(
-    font: "New Computer Modern",
-    size: 11pt,
-  )
-
-  set par(
-    leading: 1.5em,
-    justify: true,
-    first-line-indent: 0pt,
-  )
-
   body
 }
 
-#let minimal_setup(body) = {
-  set page(
-    paper: "us-letter",
-    margin: (x: 0.25in, y: 0.25in),
+#let homework(
+  homework-title: "Title",
+  course-number: "ME 000",
+  course: "Course Name",
+  instructor: "Professor Placeholder",
+  class-time: "",
+  due-date: "",
+  body,
+) = {
+  show: setup.with(header-center: [#course-number: #homework-title])
+
+  set document(
+    title: align(center + horizon)[#course-number \ #course \ #homework-title],
   )
 
-  set text(
-    font: "New Computer Modern",
-    size: 11pt,
-  )
+  align(center + horizon)[
+    #v(1in)
+    #title() \
+    #v(0.1in)
+    Due on #due-date \
+    #v(0.1in)
+    #emph[
+      #instructor \
+      #class-time
+    ] \
+    #v(3in)
+    #strong[#author] \
+    #datetime.today().display("[month repr:long] [day], [year]")
+    #metadata("title") <titlepage>
+  ]
 
-  set par(
-    leading: 1.5em,
-    justify: true,
-    first-line-indent: 0pt,
-  )
-
+  pagebreak(weak: true)
   body
 }
+
+
 
 #let calendar(year: 1970, month: 1, show_day_names: true, height: 5.25in) = {
   let month_date = datetime(
@@ -297,6 +326,7 @@
     height: 100% - 16pt,
     stack(
       spacing: 5pt,
+      dir: ttb,
       align(left)[= #month_date.display("[month repr:long]") #year],
       table(
         columns: 7,

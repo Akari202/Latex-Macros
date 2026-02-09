@@ -1,0 +1,8 @@
+[package]
+name = "akari-macros"
+version = "0.1.0"
+entrypoint = "lib.typ"
+authors = ["Akari202 <akaritwo0two@gmail.com"]
+description = "Misc macros for layout of homework and reports"
+repository = "https://github.com/Akari202/Latex-Macros/"
+exclude = "*.sty"
