@@ -109,16 +109,10 @@
 }
 
 #let minimal_setup(title: none, margin: (x: 1in, y: 1in), body) = {
-  if title != none {
-    set document(
-      title: title,
-      author: author,
-    )
-  } else {
-    set document(
-      author: author,
-    )
-  }
+  set document(
+    title: title,
+    author: author,
+  )
 
   set page(
     paper: "us-letter",
@@ -150,7 +144,7 @@
 }
 
 #let setup(title: none, header-center: [], body) = {
-  show: minimal_setup.with()
+  show: minimal_setup.with(title: title)
 
   set page(
     header-ascent: 25%,
@@ -260,10 +254,9 @@
   due-date: "",
   body,
 ) = {
-  show: setup.with(header-center: [#course-number: #homework-title])
-
-  set document(
+  show: setup.with(
     title: align(center + horizon)[#course-number \ #course \ #homework-title],
+    header-center: [#course-number: #homework-title],
   )
 
   align(center + horizon)[
