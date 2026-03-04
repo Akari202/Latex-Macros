@@ -176,7 +176,7 @@
   ]
 }
 
-#let minimal_setup(title: none, margin: (x: 1in, y: 1in), landscape: false, body) = {
+#let minimal_setup(title: none, margin: (x: 1in, y: 1in), landscape: false, bib: false, body) = {
   set document(
     title: title,
     author: author,
@@ -218,6 +218,10 @@
 
   set pagebreak(
     weak: true,
+  )
+
+  set bibliography(
+    style: "american-society-of-mechanical-engineers",
   )
 
   body
