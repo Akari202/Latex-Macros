@@ -2,53 +2,119 @@
 // Diagrams: https://typst.app/universe/package/fletcher
 // Mechanical Systems: https://github.com/34j/typst-cetz-mechanical-system
 // Number Formatting: https://typst.app/universe/package/zero
+// Physica: https://github.com/Leedehai/typst-physics
 //
 // Obsidian Formatting: https://github.com/k0src/Typsidian/
+//
+//
+// Some of the derivative macros were modified from Physica
 
 #let author = "Akari Harada"
 
-#let sgn = $op("sgn")$
-#let step(x) = $H(#x)$
-#let dirac(x) = $delta(#x)$
+#let sgn = math.op("sgn")
+#let d = math.dif
+#let step = math.op(math.upright("H"))
+#let dirac = math.op(math.delta)
+#let grad = $bold(nabla)$
+#let div = $bold(nabla)dot.c$
+#let curl = $bold(nabla)times$
+#let laplacian = $nabla^2$
+#let arcsin = $op(sin^(-1))$
+#let arccos = $op(cos^(-1))$
+#let arctan = $op(tan^(-1))$
+#let arcsec = $op(sec^(-1))$
+#let arccsc = $op(csc^(-1))$
+#let arccot = $op(cot^(-1))$
+#let arcsinh = $op(sinh^(-1))$
+#let arccosh = $op(cosh^(-1))$
+#let arctanh = $op(tanh^(-1))$
+#let arcsech = $op(sech^(-1))$
+#let arccsch = $op(csch^(-1))$
+#let arccoth = $op(coth^(-1))$
 
-#let dx(x) = $upright(d) #x$
-#let deriv(top, bottom) = $frac(upright(d) #top, upright(d) #bottom)$
-#let pderiv(top, bottom) = $frac(partial #top, partial #bottom)$
-#let pderivn(n, top, bottom) = $frac(partial^#n #top, partial #bottom^#n)$
-#let derivp(top, bottom, arg) = $deriv(#top, #bottom)lr((#arg))$
-#let pderivp(top, bottom, arg) = $pderiv(#top, #bottom)lr((#arg))$
-#let indefinteg(f, x) = $integral #f thin dx(#x)$
-#let definteg(lower, upper, f, x) = $integral_#lower^#upper #f thin dx(#x)$
+#let laplace(body) = $op(cal("L"))lr({#body})$
+#let ilaplace(body) = $op(cal("L"))^(-1)lr({#body})$
+#let evalat(body, at) = $lr(#body |)_#at$
+#let evalover(body, from, to) = $lr(#body |)_#from^#to$
+// #let det(body) = $lr(|#body|)$
+// #let lim(var, to) = $op("lim", limits: #true)_(#var -> #to)$
 
-#let evalat(at, body) = $lr(#body |)_#at$
-#let evalover(lower, upper, body) = $lr(#body |)_#lower^#upper$
 
-#let laplace(x) = $cal(L){#x}$
-#let ilaplace(x) = $cal(L)^(-1){#x}$
+#let __combine_var_order(var, order) = {
+  let naive_result = math.attach(var, t: order)
+  if type(var) != content or var.func() != math.attach {
+    return naive_result
+  }
 
-#let limit(var, to, body) = $lim_(#var arrow #to) lr((#body))$
+  if var.has("b") and (not var.has("t")) {
+    return math.attach(var.base, t: order, b: var.b)
+  }
 
-#let abs(x) = $lr(|#x|)$
-#let det(x) = $lr(|#x|)$
+  return naive_result
+}
 
-#let vel = $bold(u)$
-#let gravity = $bold(g)$
-#let grad = $nabla$
-#let div = $nabla dot$
-#let laplace_op = $nabla^2$
+
+#let derivative(..args, odr: none, d: none) = {
+  let args = args.pos()
+  let arg_count = args.len()
+  let (f, var) = if arg_count == 0 {
+    (none, $x$)
+  } else if arg_count == 1 {
+    (none, args.at(0))
+  } else if arg_count == 2 {
+    (args.at(0), args.at(1))
+  } else {
+    (none, none)
+  }
+  d = if d == none { $upright(d)$ } else { d }
+
+  if odr == none {
+    math.frac($#d#f$, $#d#var$)
+  } else {
+    let varorder = __combine_var_order(var, odr)
+    math.frac($#d^#odr#f$, $#d#varorder$)
+  }
+}
+#let dv = derivative
+
+#let pderivative(f, var, odr: none, d: none) = {
+  if f == [] { f = none }
+  let d = if d == none { math.partial } else { d }
+
+  if odr == none {
+    math.frac($#d#f$, $#d#var$)
+  } else {
+    let varorder = __combine_var_order(var, odr)
+    math.frac($#d^#odr#f$, $#d#varorder$)
+  }
+}
+#let pdv = pderivative
+
+#let integral(body, ..args) = {
+  let args = args.pos()
+  let arg_count = args.len()
+  let var = if arg_count == 0 or arg_count == 2 {
+    "x"
+  } else if arg_count == 1 {
+    args.at(0)
+  } else if arg_count == 3 {
+    args.at(2)
+  }
+
+  let integral_symbol = $std.math.integral$
+  if arg_count == 3 or arg_count == 2 {
+    $#integral_symbol _#args.at(0)^#args.at(1) #body thin dif #var$
+  } else {
+    $#integral_symbol #body thin dif #var$
+  }
+}
+
+
 
 // typst compile ./file.typ --input solutions=false
 #let show-solutions = sys.inputs.at("solutions", default: "true") == "true"
 #let color = sys.inputs.at("color", default: "false") == "true"
 #let is-homework = true
-
-#let ilcode(it) = box(
-  fill: gray.lighten(80%),
-  inset: (x: 3pt, y: 0pt),
-  outset: (y: 3pt),
-  radius: 2pt,
-  raw(it),
-)
 
 #let problem(body) = {
   counter("problem").step()
@@ -104,12 +170,13 @@
     radius: 2pt,
   )[
     #text(size: 0.85em)[
-      #strong[Example:] #body
+      #strong[Example:]\
+      #body
     ]
   ]
 }
 
-#let minimal_setup(title: none, margin: (x: 1in, y: 1in), body) = {
+#let minimal_setup(title: none, margin: (x: 1in, y: 1in), landscape: false, body) = {
   set document(
     title: title,
     author: author,
@@ -118,6 +185,7 @@
   set page(
     paper: "us-letter",
     margin: margin,
+    flipped: landscape,
   )
 
   set text(
@@ -139,6 +207,17 @@
   show math.equation: set block(
     above: 1.7em,
     below: 1.7em,
+  )
+
+  show raw.where(block: false): box.with(
+    fill: gray.lighten(75%),
+    inset: (x: 3pt, y: 0pt),
+    outset: (y: 3pt),
+    radius: 2pt,
+  )
+
+  set pagebreak(
+    weak: true,
   )
 
   body
@@ -276,13 +355,18 @@
     #metadata("title") <titlepage>
   ]
 
-  pagebreak(weak: true)
+  pagebreak()
   body
 }
 
+#let __display_event(body) = {
+  if "birthday" in body {
+    return block[#emoji.cake #body]
+  }
+  return block(body)
+}
 
-
-#let calendar(year: 1970, month: 1, show_day_names: true, height: 5.25in) = {
+#let calendar(year: 1970, month: 1, height: 5.25in, events: (:)) = {
   let month_date = datetime(
     year: year,
     month: month,
@@ -357,7 +441,26 @@
         ..range(1, first_monday).map(_ => []),
         ..monthly_days.map(day => box(
           inset: 1pt,
-          text(size: height * 1.75%, day.display("[day]")),
+          {
+            let day_str = day.display("[day]")
+            let day_events = events.at(day_str, default: none)
+            box(inset: 2pt, width: 100%, height: 100%)[
+              #text(size: 0.8em)[#day_str]
+              // #text(size: height * 1.75%)[*#day_str*]
+              #if day_events != none {
+                set align(left)
+                set text(size: 0.7em)
+                let event_type = type(day_events)
+                if event_type == array {
+                  for i in day_events {
+                    __display_event(i)
+                  }
+                } else if event_type == str or event_type == content {
+                  __display_event(day_events)
+                }
+              }
+            ]
+          },
         )),
         ..range(0, total_cells - used_cells).map(_ => []),
       ),
@@ -388,4 +491,10 @@
       size: E.size,
       baseline: E.y_offset,
     )[E]#h(X.x_offset)X]
+}
+
+#let appendix(body) = {
+  set heading(numbering: "A", supplement: [Appendix])
+  counter(heading).update(0)
+  body
 }
