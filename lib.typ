@@ -9,6 +9,9 @@
 //
 // Some of the derivative macros were modified from Physica
 
+#import "units.typ"
+#import "constants.typ"
+
 #let author = "Akari Harada"
 
 #let sgn = math.op("sgn")
@@ -225,10 +228,14 @@
   )
 
   body
+
+  if bib {
+    bibliography("refs.bib")
+  }
 }
 
-#let setup(title: none, header-center: [], body) = {
-  show: minimal_setup.with(title: title)
+#let setup(title: none, header-center: [], bib: false, body) = {
+  show: minimal_setup.with(title: title, bib: bib)
 
   set page(
     header-ascent: 25%,
@@ -376,6 +383,13 @@
     month: month,
     day: 1,
   )
+  let month_str = month_date.display("[month repr:long]")
+
+  let events = if type(events) == str {
+    toml(events).at(month_str)
+  } else {
+    events
+  }
 
   let monthly_days = ()
 
@@ -409,7 +423,7 @@
     stack(
       spacing: 5pt,
       dir: ttb,
-      align(left)[= #month_date.display("[month repr:long]") #year],
+      align(left)[= #month_str #year],
       table(
         columns: 7,
         rows: (auto,) + (1fr,) * 6,
