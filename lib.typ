@@ -11,8 +11,11 @@
 
 #import "units.typ"
 #import "constants.typ"
+#let __typ_utils = plugin("./typ-utils/target/wasm32-unknown-unknown/release/typ_utils.wasm")
 
 #let author = "Akari Harada"
+
+#let todo = text(red)[TODO]
 
 #let sgn = math.op("sgn")
 #let d = math.dif
@@ -386,7 +389,7 @@
   let month_str = month_date.display("[month repr:long]")
 
   let events = if type(events) == str {
-    toml(events).at(month_str)
+    toml(events).at(month_date.display("[year]"), default: (:)).at(month_str, default: (:))
   } else {
     events
   }
@@ -514,5 +517,24 @@
 #let appendix(body) = {
   set heading(numbering: "A", supplement: [Appendix])
   counter(heading).update(0)
+  [= Appendix]
   body
+}
+
+#let fit_monomial(data) = {
+  let data = cbor.encode(data)
+  let fit = cbor(__typ_utils.fit_monomial(data))
+  (
+    "coefficients": fit.at(0),
+    "equation": fit.at(1),
+    "degree": fit.at(2),
+    "fn": x => {
+      let out = 0
+      for i in range(fit.at(2)) {
+        out = out + fit.at(0).at(i) * calc.pow(x, i)
+      }
+      out
+    },
+    "data": fit.at(3),
+  )
 }

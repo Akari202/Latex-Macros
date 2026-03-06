@@ -1,0 +1,20 @@
+[package]
+name = "typ-utils"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+ciborium = "0.2.2"
+polyfit = { version = "0.10.2", default-features = false }
+# serde = { version = "1.0.228", features = ["derive"] }
+wasm-minimal-protocol = "0.1.0"
+
+[profile.release]
+opt-level = "z"
+strip = true
+lto = true
+panic = "abort"
+codegen-units = 1
