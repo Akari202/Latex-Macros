@@ -11,7 +11,7 @@
 
 #import "units.typ"
 #import "constants.typ"
-#let __typ_utils = plugin("./typ-utils/target/wasm32-unknown-unknown/release/typ_utils.wasm")
+#let __typ_utils = plugin("./typ-utils/typ_utils.wasm")
 
 #let author = "Akari Harada"
 
@@ -521,20 +521,19 @@
   body
 }
 
-#let fit_monomial(data) = {
-  let data = cbor.encode(data)
-  let fit = cbor(__typ_utils.fit_monomial(data))
+#let fit_monomial(data, max_degree: 5) = {
+  let fit = cbor(__typ_utils.fit_monomial(cbor.encode(data), cbor.encode(max_degree)))
   (
     "coefficients": fit.at(0),
-    "equation": fit.at(1),
+    "equation": $#fit.at(1)$,
     "degree": fit.at(2),
+    "r-squared": fit.at(3),
     "fn": x => {
       let out = 0
-      for i in range(fit.at(2)) {
+      for i in range(fit.at(2) + 1) {
         out = out + fit.at(0).at(i) * calc.pow(x, i)
       }
       out
     },
-    "data": fit.at(3),
   )
 }
