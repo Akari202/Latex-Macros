@@ -11,6 +11,7 @@
 
 #import "units.typ"
 #import "constants.typ"
+#import "circuits.typ"
 #let __typ_utils = plugin("./typ-utils/typ_utils.wasm")
 
 #let author = "Akari Harada"

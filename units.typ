@@ -50,4 +50,34 @@
 #let horsepower = unit([hp])
 #let hp = horsepower
 
+// Resistance
+#let megaohm = unit([M#math.Omega])
+#let Mohm = megaohm
+#let kiloohm = unit([k#math.Omega])
+#let kohm = kiloohm
+#let ohm = unit([#math.Omega])
+#let ohm = ohm
 
+// Voltage
+#let volts = unit([V])
+#let V = volts
+#let millivolts = unit([mV])
+#let mV = millivolts
+
+// Current
+#let amps = unit([A])
+#let A = amps
+#let milliamps = unit([mA])
+#let mA = milliamps
+
+// Capacitance
+#let farad = unit([F])
+#let F = farad
+#let millifarad = unit([mF])
+#let mF = millifarad
+#let microfarad = unit([#{ math.mu }F])
+#let uF = microfarad
+#let nanofarad = unit([nF])
+#let nF = nanofarad
+#let picofarad = unit([pF])
+#let pF = picofarad
