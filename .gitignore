@@ -305,6 +305,8 @@ TSWLatexianTemp*
 # Uncomment the next line to have this generated file ignored.
 #*Notes.bib
 
-b*.typ
+physica.typ
+signals.typ
+Typst\ Reference.typ
 
 target/

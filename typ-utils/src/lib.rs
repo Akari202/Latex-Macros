@@ -7,10 +7,9 @@ initiate_protocol!();
 
 #[wasm_func]
 pub fn fit_monomial(data: &[u8], degree: &[u8]) -> Vec<u8> {
-    let degree: i32 = from_reader(degree).unwrap();
-    let data: Vec<(i32, f64)> = from_reader(data).unwrap();
-    let data: Vec<(f64, f64)> = data.iter().map(|i| (i.0 as f64, i.1)).collect();
-    let fit = MonomialFit::new_auto(&data, degree as usize, &Aic).unwrap();
+    let degree = i8::from_le_bytes(degree.try_into().unwrap()) as usize;
+    let data: Vec<(f64, f64)> = from_reader(data).unwrap();
+    let fit = MonomialFit::new_auto(&data, degree, &Aic).unwrap();
     let mut out = Vec::new();
     into_writer(
         &(
