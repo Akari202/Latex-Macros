@@ -115,14 +115,24 @@
     )[E]#h(X.x_offset)X]
 }
 
-#let appendix(body) = {
-  set heading(numbering: "A", supplement: [Appendix])
+#let appendix(body, repeat-figures: false) = {
+  pagebreak(weak: true)
+  set heading(numbering: "A.a", supplement: [Appendix])
   counter(heading).update(0)
-  [= Appendix]
   body
+  if repeat-figures {
+    [= All Figures]
+    context {
+      let figures = query(figure)
+      for i in figures {
+        [== #query(selector(heading).before(i.location())).at(-1).body | #i.supplement #numbering(i.numbering, i.counter.at(i.location()).at(0))]
+        i
+      }
+    }
+  }
 }
 
-#let fit_monomial(data, max_degree: 5) = {
+#let fit-monomial(data, max_degree: 5) = {
   assert(max_degree < calc.pow(2, 7) - 1, message: "Cannot have a degree higher than 127")
   let fit = cbor(__typ_utils.fit_monomial(
     cbor.encode(data.map(i => { i.map(float) })),
@@ -140,5 +150,27 @@
       }
       out
     },
+  )
+}
+
+#let truth-table(statement, caption: "Truth table for the statement") = {
+  let data = cbor(__typ_utils.truth_table(bytes(statement)))
+  figure(
+    caption: caption,
+    table(
+      columns: data.headers.len(),
+      align: center,
+      stroke: (x, y) => {
+        let s = (thickness: 0.5pt)
+        (
+          top: if y == 1 { s },
+          bottom: if y == 0 { s },
+          left: if x > 0 { s },
+          right: if x < data.headers.len() - 1 { s },
+        )
+      },
+      ..data.headers.map(i => [#eval(i, mode: "math")]),
+      ..data.rows.flatten().map(i => if i [T] else [F])
+    ),
   )
 }

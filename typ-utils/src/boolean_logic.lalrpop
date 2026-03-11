@@ -1,0 +1,40 @@
+use crate::logic::Expression;
+
+grammar;
+
+pub Expr: Expression = {
+    <l:Expr> "<=>" <r:Implication> => Expression::Equivalence(Box::new(l), Box::new(r)),
+    Implication,
+};
+
+Implication: Expression = {
+    <l:Or> "=>" <r:Implication> => Expression::Implication(Box::new(l), Box::new(r)),
+    Or,
+};
+
+Or: Expression = {
+    <l:Or> "or" <r:Xor> => Expression::Or(Box::new(l), Box::new(r)),
+    Xor,
+};
+
+Xor: Expression = {
+    <l:Xor> "xor" <r:And> => Expression::Xor(Box::new(l), Box::new(r)),
+    And,
+};
+
+And: Expression = {
+    <l:And> "and" <r:Not> => Expression::And(Box::new(l), Box::new(r)),
+    Not,
+};
+
+Not: Expression = {
+    "not" <e:Not> => Expression::Not(Box::new(e)),
+    Term,
+};
+
+Term: Expression = {
+    <s:Id> => Expression::Var(s),
+    "(" <e:Expr> ")" => e,
+};
+
+Id: String = <s:r"[a-z][a-z0-9]*"> => s.to_string();

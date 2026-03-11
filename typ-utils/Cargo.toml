@@ -8,9 +8,13 @@ crate-type = ["cdylib"]
 
 [dependencies]
 ciborium = "0.2.2"
+lalrpop-util = "0.23.1"
 polyfit = { version = "0.10.2", default-features = false }
-# serde = { version = "1.0.228", features = ["derive"] }
+serde = { version = "1.0.228", features = ["derive"] }
 wasm-minimal-protocol = "0.1.0"
+
+[build-dependencies]
+lalrpop = "0.23.1"
 
 [profile.release]
 opt-level = "z"

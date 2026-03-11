@@ -1,4 +1,4 @@
-#import "config.typ": author, is-homework
+#import "config.typ": author, is-homework, only-figures
 
 #let minimal_setup(title: none, margin: (x: 1in, y: 1in), landscape: false, bib: false, body) = {
   set document(
