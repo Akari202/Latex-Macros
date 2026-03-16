@@ -1,23 +1,34 @@
+#![feature(iterator_try_collect, never_type)]
 use std::collections::{HashMap, HashSet};
 use std::error::Error;
 
-use ciborium::{from_reader, into_writer};
+use ciborium::into_writer;
 use lalrpop_util::lalrpop_mod;
 use polyfit::MonomialFit;
 use polyfit::score::Aic;
+use serde::Serialize;
+use sertyp::{Float, Integer, TypedArray, typst_func};
 use wasm_minimal_protocol::*;
-
-use crate::logic::TableData;
 
 mod logic;
 
 lalrpop_mod!(boolean_logic);
+#[cfg(target_arch = "wasm32")]
 initiate_protocol!();
 
-#[cfg_attr(not(test), wasm_func)]
-pub fn fit_monomial(data: &[u8], degree: &[u8]) -> Vec<u8> {
-    let degree = i8::from_le_bytes(degree.try_into().unwrap()) as usize;
-    let data: Vec<(f64, f64)> = from_reader(data).unwrap();
+#[derive(Serialize)]
+pub struct TableData {
+    pub headers: Vec<String>,
+    pub rows: Vec<Vec<bool>>
+}
+
+#[typst_func]
+pub fn fit_monomial(data: TypedArray<TypedArray<Float>>, degree: Integer) -> Vec<u8> {
+    let degree: usize = degree.try_into().unwrap();
+    let data: Vec<(f64, f64)> = data
+        .into_iter()
+        .map(|i| (i[0].clone().into(), i[1].clone().into()))
+        .collect();
     let fit = MonomialFit::new_auto(&data, degree, &Aic).unwrap();
     let mut out = Vec::new();
     into_writer(

@@ -101,7 +101,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "57663b653d948a338bfb3eeba9bb2fd5fcfaecb9e199e87e1eda4d9e8b240fd9"
 dependencies = [
  "ciborium-io",
- "half",
+ "half 2.7.1",
 ]
 
 [[package]]
@@ -181,6 +181,12 @@ dependencies = [
  "typenum",
  "version_check",
 ]
+
+[[package]]
+name = "half"
+version = "1.8.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1b43ede17f21864e81be2fa654110bf1e793774238d86ef8555c37e6519c0403"
 
 [[package]]
 name = "half"
@@ -562,6 +568,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "serde_cbor"
+version = "0.11.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2bef2ebfde456fb76bbcf9f59315333decc4fda0b2b44b420243c11e0f5ec1f5"
+dependencies = [
+ "half 1.8.3",
+ "serde",
+]
+
+[[package]]
 name = "serde_core"
 version = "1.0.228"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -592,6 +608,26 @@ dependencies = [
  "serde",
  "serde_core",
  "zmij",
+]
+
+[[package]]
+name = "sertyp"
+version = "0.1.2"
+source = "git+https://github.com/Akari202/sertyp#ff4ffdf6f1b3b5691a12fa916a6961dd7854bb64"
+dependencies = [
+ "paste",
+ "serde",
+ "serde_cbor",
+ "sertyp_macros",
+]
+
+[[package]]
+name = "sertyp_macros"
+version = "0.1.2"
+source = "git+https://github.com/Akari202/sertyp#ff4ffdf6f1b3b5691a12fa916a6961dd7854bb64"
+dependencies = [
+ "quote",
+ "syn",
 ]
 
 [[package]]
@@ -690,6 +726,7 @@ dependencies = [
  "lalrpop-util",
  "polyfit",
  "serde",
+ "sertyp",
  "wasm-minimal-protocol",
 ]
 

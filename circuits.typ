@@ -15,9 +15,24 @@
   "|",
   "#",
   "*",
+  ",",
+  "&",
 )
 
-#let draw-circuit(input-str, ..args, drawing-scale: 1, debug: false, stroke: auto) = {
+#let __no-connect = (
+  "*",
+  ",",
+  "&",
+)
+
+#let draw-circuit(
+  input-str,
+  ..args,
+  drawing-scale: 1,
+  debug: false,
+  stroke: auto,
+  number-format: "a",
+) = {
   import "@preview/cetz:0.4.2"
   let positions = (
     (-1, 0),
@@ -47,6 +62,8 @@
     import cetz.draw: *
 
     let star_count = 0
+    let label_count = 1
+    let loop_count = 0
     for (coord, char) in part-grid {
       let (ix, iy) = coord.split(",").map(int)
       let (x, y) = (ix * drawing-scale, iy * drawing-scale)
@@ -65,7 +82,7 @@
             str(ix + i.at(0)) + "," + str(iy + i.at(1)),
             default: none,
           )
-          if other != none and other != "*" {
+          if other != none and not other in __no-connect {
             line(
               (x + radius * i.at(0), y + radius * i.at(1)),
               (x + i.at(0) * half-length, y + i.at(1) * half-length),
@@ -192,6 +209,21 @@
         )
         line((x, y + 0.4 * drawing-scale), (x, y + half-length))
         line((x, y - 0.4 * drawing-scale), (x, y - half-length))
+      } else if char == "&" {
+        arc(
+          (x + calc.sin(45deg) * half-length, y - calc.cos(45deg) * half-length),
+          radius: half-length,
+          start: -45deg,
+          delta: 245deg,
+        )
+        mark(
+          (x - calc.sin(45deg) * half-length, y - calc.cos(45deg) * half-length),
+          -58deg,
+          symbol: "stealth",
+          stroke: 1pt,
+        )
+        content((x, y), $i_#loop_count$)
+        loop_count += 1
       } else if char == "-" {
         line((x - half-length, y), (x + half-length, y))
       } else if char == "|" {
@@ -202,13 +234,16 @@
             str(ix + i.at(0)) + "," + str(iy + i.at(1)),
             default: none,
           )
-          if (other != none and other != "*") or single {
+          if (other != none and not other in __no-connect) or single {
             line((x + i.at(0) * half-length, y + i.at(1) * half-length), (x, y))
           }
         }
       } else if char == "*" {
         content((x, y), args.at(star_count, default: "*"))
-        star_count = star_count + 1
+        star_count += 1
+      } else if char == "," {
+        content((x, y), [#numbering(number-format, label_count)])
+        label_count += 1
       } else {
         content((x, y), char)
       }

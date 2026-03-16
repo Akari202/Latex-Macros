@@ -1,14 +1,6 @@
 use std::collections::{HashMap, HashSet};
 use std::fmt;
 
-use serde::Serialize;
-
-#[derive(Serialize)]
-pub struct TableData {
-    pub headers: Vec<String>,
-    pub rows: Vec<Vec<bool>>
-}
-
 #[derive(Debug, Clone)]
 pub enum Expression {
     Var(String),

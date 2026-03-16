@@ -13,8 +13,10 @@
 #import "math.typ": *
 #import "constants.typ"
 #import "circuits.typ"
-#import "calendar.typ": calendar
+#import "calendar.typ": month_calendar, range_calendar
 #import "setups.typ": *
+
+#import "@preview/sertyp:0.1.2"
 #let __typ_utils = plugin("./typ-utils/typ_utils.wasm")
 
 #let problem(body) = {
@@ -134,9 +136,13 @@
 
 #let fit-monomial(data, max_degree: 5) = {
   assert(max_degree < calc.pow(2, 7) - 1, message: "Cannot have a degree higher than 127")
+  // let fit = cbor(__typ_utils.fit_monomial(
+  //   cbor.encode(data.map(i => { i.map(float) })),
+  //   max_degree.to-bytes(endian: "little", size: 1),
+  // ))
   let fit = cbor(__typ_utils.fit_monomial(
-    cbor.encode(data.map(i => { i.map(float) })),
-    max_degree.to-bytes(endian: "little", size: 1),
+    sertyp.serialize-cbor(data.map(i => { i.map(float) })),
+    sertyp.serialize-cbor(max_degree),
   ))
   (
     "coefficients": fit.at(0),
