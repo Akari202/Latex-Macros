@@ -1,6 +1,6 @@
 #import "config.typ": author, is-homework, only-figures
 
-#let minimal_setup(title: none, margin: (x: 1in, y: 1in), landscape: false, bib: false, body) = {
+#let minimal-setup(title: none, margin: (x: 1in, y: 1in), landscape: false, bib: false, body) = {
   set document(
     title: title,
     author: author,
@@ -71,7 +71,7 @@
 }
 
 #let setup(title: none, header-center: [], bib: false, body) = {
-  show: minimal_setup.with(title: title, bib: bib)
+  show: minimal-setup.with(title: title, bib: bib)
 
   set page(
     header-ascent: 25%,

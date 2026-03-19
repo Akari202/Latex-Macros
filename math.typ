@@ -27,7 +27,7 @@
 // #let lim(var, to) = $op("lim", limits: #true)_(#var -> #to)$
 
 
-#let __combine_var_order(var, order) = {
+#let __combine-var-order(var, order) = {
   let naive_result = math.attach(var, t: order)
   if type(var) != content or var.func() != math.attach {
     return naive_result
@@ -58,7 +58,7 @@
   if odr == none {
     math.frac($#d#f$, $#d#var$)
   } else {
-    let varorder = __combine_var_order(var, odr)
+    let varorder = __combine-var-order(var, odr)
     math.frac($#d^#odr#f$, $#d#varorder$)
   }
 }
@@ -71,7 +71,7 @@
   if odr == none {
     math.frac($#d#f$, $#d#var$)
   } else {
-    let varorder = __combine_var_order(var, odr)
+    let varorder = __combine-var-order(var, odr)
     math.frac($#d^#odr#f$, $#d#varorder$)
   }
 }

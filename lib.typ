@@ -7,6 +7,13 @@
 //
 //
 // Some of the derivative macros were modified from/inspired by Physica
+//
+// Naming convention:
+// I am tring to switch all identifiers to use kebab-case
+// "private" identifiers will be prefixed with "__"
+// Units and constants will continue to use snake_case
+// Additionally WASM plugin function names will follow Rust and be snake_case
+// Internal variables are inconsistent and need to be fixed
 
 #import "config.typ": *
 #import "units.typ"
@@ -19,7 +26,7 @@
 #import "setups.typ": *
 
 #import "@preview/sertyp:0.1.2"
-#let __typ_utils = plugin("./typ-utils/typ_utils.wasm")
+#let __typ-utils = plugin("./typ-utils/typ_utils.wasm")
 
 #let problem(body) = {
   counter("problem").step()
@@ -138,7 +145,7 @@
 
 #let fit-monomial(data, max_degree: 5) = {
   assert(max_degree < calc.pow(2, 7) - 1, message: "Cannot have a degree higher than 127")
-  let fit = cbor(__typ_utils.fit_monomial(
+  let fit = cbor(__typ-utils.fit_monomial(
     sertyp.serialize-cbor(data.map(i => { i.map(float) })),
     sertyp.serialize-cbor(max_degree),
   ))
@@ -158,7 +165,7 @@
 }
 
 #let truth-table(statement, caption: "Truth table for the statement") = {
-  let data = cbor(__typ_utils.truth_table(bytes(statement)))
+  let data = cbor(__typ-utils.truth_table(bytes(statement)))
   figure(
     caption: caption,
     table(
