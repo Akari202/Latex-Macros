@@ -1,4 +1,3 @@
-
 #let sgn = math.op("sgn")
 #let d = math.dif
 #let step = math.op(math.upright("H"))

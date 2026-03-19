@@ -1,13 +1,99 @@
+#let unit-spacing = math.thin
+
 #let unit(body) = {
-  math.thin
+  unit-spacing
   math.upright(body)
 }
 
+// typst can only handle up to i64
+#let si-prefixes = (
+  "-30": (name: "quecto", prefix: "q"),
+  "-27": (name: "ronto", prefix: "r"),
+  "-24": (name: "yocto", prefix: "y"),
+  "-21": (name: "zepto", prefix: "z"),
+  "-18": (name: "atto", prefix: "a"),
+  "-15": (name: "femto", prefix: "f"),
+  "-12": (name: "pico", prefix: "p"),
+  "-9": (name: "nano", prefix: "n"),
+  "-6": (name: "micro", prefix: math.mu),
+  "-3": (name: "milli", prefix: "m"),
+  "-2": (name: "centi", prefix: "c"),
+  "-1": (name: "deci", prefix: "d"),
+  "1": (name: "deka", prefix: "da"),
+  "2": (name: "hecto", prefix: "h"),
+  "3": (name: "kilo", prefix: "k"),
+  "6": (name: "mega", prefix: "M"),
+  "9": (name: "giga", prefix: "G"),
+  "12": (name: "tera", prefix: "T"),
+  "15": (name: "peta", prefix: "P"),
+  "18": (name: "exa", prefix: "E"),
+  "21": (name: "zetta", prefix: "Z"),
+  "24": (name: "yotta", prefix: "Y"),
+  "27": (name: "ronna", prefix: "R"),
+  "30": (name: "quetta", prefix: "Q"),
+)
+
+#let prefix(value, base-unit, partials: false, offset: 0, digits: 3) = {
+  let unit = {
+    show h: none
+    base-unit
+  }
+  let exponent = calc.floor(calc.log(calc.abs(value)))
+  let total-exponent = exponent + offset
+  let prefix-exponent = if not partials or calc.abs(total-exponent) > 3 {
+    calc.floor(total-exponent / 3) * 3
+  } else {
+    total-exponent
+  }
+  let prefix = si-prefixes.at(repr(prefix-exponent), default: none)
+  if prefix == none {
+    let value = calc.round(value * calc.pow(10, offset), digits: digits)
+    [#value#unit-spacing#unit]
+  } else {
+    let value = calc.round(value * calc.pow(10, offset - prefix-exponent), digits: digits)
+    [#value#unit-spacing#prefix.prefix#unit]
+  }
+}
+
 // Temperature
-#let degC = unit([#{ math.degree }C])
-#let degF = unit([#{ math.degree }F])
+#let celsius = unit([#{ math.degree }C])
+#let degC = celsius
+#let fahrenheit = unit([#{ math.degree }F])
+#let degF = fahrenheit
 #let kelvin = unit([K])
-#let rankine = unit([R])
+#let degK = kelvin
+#let rankine = unit([#{ math.degree }Ra])
+#let degR = rankine
+#let temperature(value, have, want: "F", digits: 3) = {
+  let have = upper(have)
+  let want = upper(want)
+
+  // KCFR... where have i heard those letters before?
+  // CPR is great
+  let value = if have == "K" {
+    value
+  } else if have == "C" {
+    value + 273.15
+  } else if have == "F" {
+    (value - 32) * 5 / 9 + 273.15
+  } else if have == "R" {
+    value * 5 / 9
+  } else {
+    return "Unknown unit: " + have
+  }
+
+  if want == "K" {
+    $#calc.round(value, digits: digits)#kelvin$
+  } else if want == "C" {
+    $#{ calc.round(value - 273.15, digits: digits) }#celsius$
+  } else if want == "F" {
+    $#{ calc.round((value - 273.15) * 9 / 5 + 32, digits: digits) }#fahrenheit$
+  } else if want == "R" {
+    $#{ calc.round(value * 9 / 5, digits: digits) }#rankine$
+  } else {
+    return "Unknown unit: " + want
+  }
+}
 
 // Length
 #let kilometer = unit([km])

@@ -10,10 +10,12 @@
 
 #import "config.typ": *
 #import "units.typ"
+#import "units.typ": prefix, temperature
+#import "draw.typ"
 #import "math.typ": *
 #import "constants.typ"
 #import "circuits.typ"
-#import "calendar.typ": month_calendar, range_calendar
+#import "calendar.typ": month-calendar, range-calendar
 #import "setups.typ": *
 
 #import "@preview/sertyp:0.1.2"
@@ -136,10 +138,6 @@
 
 #let fit-monomial(data, max_degree: 5) = {
   assert(max_degree < calc.pow(2, 7) - 1, message: "Cannot have a degree higher than 127")
-  // let fit = cbor(__typ_utils.fit_monomial(
-  //   cbor.encode(data.map(i => { i.map(float) })),
-  //   max_degree.to-bytes(endian: "little", size: 1),
-  // ))
   let fit = cbor(__typ_utils.fit_monomial(
     sertyp.serialize-cbor(data.map(i => { i.map(float) })),
     sertyp.serialize-cbor(max_degree),
@@ -177,6 +175,162 @@
       },
       ..data.headers.map(i => [#eval(i, mode: "math")]),
       ..data.rows.flatten().map(i => if i [T] else [F])
+    ),
+  )
+}
+
+// For columns:
+// l:  left align
+// r:  right align
+// c:  center align
+// |:  vertical line
+// ||: bold vertical line (wish double lines were easy)
+//
+// For rows:
+// t:  top align
+// b:  bottom align
+// h:  horizon align
+// |:  horizontal line
+// ||: bold horizontal line (wish double lines were easy)
+//
+// For both:
+// " ": adds one unit of padding
+//
+// Returns a dictionary that can be spread into a table:
+// (
+//     inset: fn(x, y),
+//     align: fn(x,y),
+//     stroke: fn(x, y)
+// )
+//
+// NOTE:
+// Currently rows and columns must have enough markers for the size of the table
+#let latex-style(cols: "", rows: "", weight: 0.5pt, padding: 1em) = {
+  let alignment-markers = (l: left, r: right, c: center, t: top, b: bottom, h: horizon)
+  let alignment-keys = alignment-markers.keys()
+
+  let nibble(input, rev: false) = {
+    let result = (pad: 0% + 5pt, sep: none)
+    if input.len() == 0 {
+      return result
+    }
+    if rev {
+      input = input.rev()
+    }
+    for k in input {
+      if k == " " {
+        if result.sep == none {
+          result.pad += padding
+        } else {
+          return result
+        }
+      } else if k == "|" {
+        if result.sep == none {
+          result.sep = "|"
+        } else {
+          result.sep += "|"
+        }
+      }
+    }
+    if result.sep == none {
+      result.pad *= 50%
+    }
+    return result
+  }
+
+  let parse(string) = {
+    let result = (:)
+    let chars = string.clusters()
+    let n = chars.len()
+
+    let marker-indices = ()
+    for i in range(n) {
+      if chars.at(i) in alignment-keys {
+        marker-indices.push(i)
+      }
+    }
+
+    for (i, j) in marker-indices.enumerate() {
+      let char = chars.at(j)
+      let before = chars.slice(
+        if i == 0 {
+          0
+        } else {
+          marker-indices.at(i - 1) + 1
+        },
+        j,
+      )
+      let after = chars.slice(
+        j + 1,
+        if i == marker-indices.len() - 1 {
+          none
+        } else {
+          marker-indices.at(i + 1)
+        },
+      )
+
+      result.insert(str(i), (
+        align: alignment-markers.at(char, default: none),
+        before: nibble(before, rev: true),
+        after: nibble(after, rev: false),
+      ))
+    }
+    result
+  }
+
+  let cols = parse(cols)
+  let rows = parse(rows)
+
+  let get-stroke(sep) = {
+    if sep == none {
+      none
+    } else if sep == "||" {
+      weight * 2
+    } else if sep == "|" {
+      weight
+    }
+  }
+
+  (
+    align: (x, y) => {
+      cols.at(str(x)).align + rows.at(str(y)).align
+    },
+    inset: (x, y) => {
+      let vertical = rows.at(str(y))
+      let horizontal = cols.at(str(x))
+      (
+        left: horizontal.before.pad,
+        right: horizontal.after.pad,
+        top: vertical.before.pad,
+        bottom: vertical.after.pad,
+      )
+    },
+    stroke: (x, y) => {
+      let vertical = rows.at(str(y))
+      let horizontal = cols.at(str(x))
+      (
+        left: get-stroke(horizontal.before.sep),
+        right: get-stroke(horizontal.after.sep),
+        top: get-stroke(vertical.before.sep),
+        bottom: get-stroke(vertical.after.sep),
+      )
+    },
+  )
+}
+
+#let typst-example(
+  body,
+  scope: (:),
+  caption: "A demonstration of typst code",
+  columns: (1fr, 1fr),
+) = {
+  figure(
+    caption: caption,
+    grid(
+      columns: columns,
+      inset: 1.5em,
+      align: left + horizon,
+      raw(lang: "typst", block: true, body), eval(body, mode: "markup", scope: scope),
     ),
   )
 }

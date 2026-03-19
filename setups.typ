@@ -34,10 +34,21 @@
   )
 
   show raw.where(block: false): box.with(
-    fill: gray.lighten(75%),
-    inset: (x: 3pt, y: 0pt),
+    fill: gray.lighten(80%),
+    // inset: (x: 3pt, y: 0pt),
+    inset: (x: 3pt, y: 1pt),
+    // inset: (x: 5pt, y: 3pt),
     outset: (y: 3pt),
     radius: 2pt,
+  )
+
+  show raw.where(block: true): box.with(
+    fill: gray.lighten(90%),
+    stroke: gray,
+    inset: (x: 8pt, y: 5pt),
+    outset: (y: 3pt),
+    radius: 2pt,
+    width: 100%,
   )
 
   set pagebreak(
@@ -46,6 +57,10 @@
 
   set bibliography(
     style: "american-society-of-mechanical-engineers",
+  )
+
+  set table(
+    stroke: none,
   )
 
   body

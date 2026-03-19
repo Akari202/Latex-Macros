@@ -188,7 +188,13 @@
   return events
 }
 
-#let month_calendar(year: 1970, month: 1, height: 5.25in, events: (:)) = {
+#let month-calendar(year: 1970, month: 1, height: 5.25in, events: (:)) = {
+  let month = if type(month) == str {
+    __month_to_int(lower(month))
+  } else {
+    month
+  }
+
   let month_date = datetime(
     year: year,
     month: month,
@@ -299,16 +305,20 @@
   )
 }
 
-#let range_calendar(
+#let range-calendar(
   start: (year: 1970, month: 1),
   end: 1,
   events: (:),
   height: 5.25in,
 ) = {
+  if type(start.month) == str {
+    start.month = __month_to_int(lower(start.month))
+  }
+
   let events = if type(events) == str {
     __process_ranges(toml(events))
   } else {
-    events
+    __process_ranges(events)
   }
   let month_count = if type(end) == int {
     end
@@ -319,9 +329,10 @@
     let total_months = (start.month - 1) + i
     let year = int(start.year + (total_months / 12))
     let month = int(calc.rem(total_months, 12) + 1)
-    month_calendar(
+    month-calendar(
       year: year,
       month: month,
+      height: height,
       events: events.at(str(year), default: (:)).at(__int_to_month(month), default: (:)),
     )
   }
