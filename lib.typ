@@ -341,3 +341,7 @@
     ),
   )
 }
+
+#let boxed(body) = {
+  rect(body, outset: 4pt, stroke: 0.5pt)
+}

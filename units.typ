@@ -64,7 +64,9 @@
 #let degK = kelvin
 #let rankine = unit([#{ math.degree }Ra])
 #let degR = rankine
-#let temperature(value, have, want: "F", digits: 3) = {
+
+// Temperature scales are any one of K, C, F, R
+#let temperature(value, have, want: "F", digits: 3, just-value: false) = {
   let have = upper(have)
   let want = upper(want)
 
@@ -82,16 +84,22 @@
     return "Unknown unit: " + have
   }
 
-  if want == "K" {
-    $#calc.round(value, digits: digits)#kelvin$
+  let (value, unit) = if want == "K" {
+    (calc.round(value, digits: digits), kelvin)
   } else if want == "C" {
-    $#{ calc.round(value - 273.15, digits: digits) }#celsius$
+    (calc.round(value - 273.15, digits: digits), celsius)
   } else if want == "F" {
-    $#{ calc.round((value - 273.15) * 9 / 5 + 32, digits: digits) }#fahrenheit$
+    (calc.round((value - 273.15) * 9 / 5 + 32, digits: digits), fahrenheit)
   } else if want == "R" {
-    $#{ calc.round(value * 9 / 5, digits: digits) }#rankine$
+    (calc.round(value * 9 / 5, digits: digits), rankine)
   } else {
     return "Unknown unit: " + want
+  }
+
+  if just-value {
+    return value
+  } else {
+    $#value #unit$
   }
 }
 
