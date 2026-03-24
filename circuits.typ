@@ -11,6 +11,10 @@
   "H",
   "s",
   "S",
+  "d",
+  "D",
+  "w",
+  "W",
   "-",
   "|",
   "#",
@@ -25,6 +29,7 @@
   "&",
 )
 
+
 #let draw-circuit(
   input-str,
   ..args,
@@ -32,6 +37,7 @@
   debug: false,
   stroke: auto,
   number-format: "a",
+  scale-text: true,
 ) = {
   import "@preview/cetz:0.4.2"
   let positions = (
@@ -53,6 +59,34 @@
       if char in __all-components {
         part-grid.insert(str(x) + "," + str(-y), char)
       }
+    }
+  }
+
+  // Modified and cleaned up from one-liner
+  // Should probably be pulled out and re generalized
+  let fit-to-width(body) = context {
+    let max-text-size = text.size
+    // let max-text-size = text.size * 3
+    let min-text-size = 4pt
+
+    let content-size = measure(body)
+    if content-size.width > 0pt {
+      // Cetz seems to have a 1cm base unit although i can't find that documented
+      let ratio-x = 1.2cm / content-size.width * drawing-scale
+      let ratio-y = 1cm / content-size.height * drawing-scale
+      let new-text-size = 1em * calc.min(ratio-x, ratio-y)
+      let clamped-text-size = calc.max(
+        calc.min(
+          new-text-size.to-absolute(),
+          max-text-size,
+        ),
+        min-text-size,
+      )
+
+      set text(size: clamped-text-size)
+      body
+    } else {
+      body
     }
   }
 
@@ -179,6 +213,70 @@
         )
         circle((x, y + 0.25 * drawing-scale), radius: radius)
         line((x, y + half-length), (x, y + 0.3 * drawing-scale))
+      } else if char == "w" {
+        let radius = 0.05 * drawing-scale
+        let angle = 35deg
+        line((x + half-length, y), (x + 0.3 * drawing-scale, y))
+        circle((x + 0.25 * drawing-scale, y), radius: radius)
+        line(
+          (x + 0.25 * drawing-scale - calc.cos(angle) * radius, y + calc.sin(angle) * radius),
+          (
+            x + 0.25 * drawing-scale - calc.cos(angle) * 0.5 * drawing-scale,
+            y + calc.sin(angle) * 0.5 * drawing-scale,
+          ),
+        )
+        circle((x, y + 0.25 * drawing-scale), radius: radius)
+        line((x, y + half-length), (x, y + 0.3 * drawing-scale))
+        circle((x, y - 0.25 * drawing-scale), radius: radius)
+        line((x, y - half-length), (x, y - 0.3 * drawing-scale))
+      } else if char == "W" {
+        let radius = 0.05 * drawing-scale
+        let angle = 35deg
+        line((x, y + half-length), (x, y + 0.3 * drawing-scale))
+        circle((x, y + 0.25 * drawing-scale), radius: radius)
+        line(
+          (x + calc.sin(angle) * radius, y + 0.25 * drawing-scale - calc.cos(angle) * radius),
+          (
+            x + calc.sin(angle) * 0.5 * drawing-scale,
+            y + 0.25 * drawing-scale - calc.cos(angle) * 0.5 * drawing-scale,
+          ),
+        )
+        circle((x + 0.25 * drawing-scale, y), radius: radius)
+        line((x + half-length, y), (x + 0.3 * drawing-scale, y))
+        circle((x - 0.25 * drawing-scale, y), radius: radius)
+        line((x - half-length, y), (x - 0.3 * drawing-scale, y))
+      } else if char == "d" {
+        let radius = 0.05 * drawing-scale
+        let angle = 35deg
+        line((x - half-length, y), (x - 0.3 * drawing-scale, y))
+        circle((x - 0.25 * drawing-scale, y), radius: radius)
+        line(
+          (x - 0.25 * drawing-scale + calc.cos(angle) * radius, y + calc.sin(angle) * radius),
+          (
+            x - 0.25 * drawing-scale + calc.cos(angle) * 0.5 * drawing-scale,
+            y + calc.sin(angle) * 0.5 * drawing-scale,
+          ),
+        )
+        circle((x, y + 0.25 * drawing-scale), radius: radius)
+        line((x, y + half-length), (x, y + 0.3 * drawing-scale))
+        circle((x, y - 0.25 * drawing-scale), radius: radius)
+        line((x, y - half-length), (x, y - 0.3 * drawing-scale))
+      } else if char == "D" {
+        let radius = 0.05 * drawing-scale
+        let angle = 35deg
+        line((x, y - half-length), (x, y - 0.3 * drawing-scale))
+        circle((x, y - 0.25 * drawing-scale), radius: radius)
+        line(
+          (x + calc.sin(angle) * radius, y - 0.25 * drawing-scale + calc.cos(angle) * radius),
+          (
+            x + calc.sin(angle) * 0.5 * drawing-scale,
+            y - 0.25 * drawing-scale + calc.cos(angle) * 0.5 * drawing-scale,
+          ),
+        )
+        circle((x + 0.25 * drawing-scale, y), radius: radius)
+        line((x + half-length, y), (x + 0.3 * drawing-scale, y))
+        circle((x - 0.25 * drawing-scale, y), radius: radius)
+        line((x - half-length, y), (x - 0.3 * drawing-scale, y))
       } else if char == "v" {
         // https://math.stackexchange.com/questions/4235124/getting-the-most-accurate-bezier-curve-that-plots-a-sine-wave
         let w = 0.4 * drawing-scale
@@ -239,7 +337,11 @@
           }
         }
       } else if char == "*" {
-        content((x, y), args.at(star_count, default: "*"))
+        let unscaled-text = args.at(star_count, default: "*")
+        content(
+          (x, y),
+          if scale-text { fit-to-width(unscaled-text) } else { unscaled-text },
+        )
         star_count += 1
       } else if char == "," {
         content((x, y), [#numbering(number-format, label_count)])
