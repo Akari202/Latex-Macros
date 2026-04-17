@@ -15,8 +15,9 @@
 // Additionally WASM plugin function names will follow Rust and be snake_case
 // Internal variables are inconsistent and need to be fixed
 
-#import "config.typ": author, color, is-homework
+#import "config.typ": author, show-color
 #import "units.typ"
+#import "cooking.typ"
 #import "draw.typ"
 #import "math.typ": *
 #import "constants.typ"

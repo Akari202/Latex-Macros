@@ -21,6 +21,7 @@
 #let __display_event(body) = {
   let lowercase = lower(body)
 
+  let rect-stroke = 0.25pt + black
 
   if lowercase.ends-with(" middle day hidden") {
     let name = body.replace(" middle day hidden", "", count: 1).replace("__", "", count: 1)
@@ -28,7 +29,7 @@
       width: 100% + 10pt,
       inset: (y: 2pt, x: 4pt),
       outset: (left: 8pt, right: -2pt),
-      stroke: (y: 0.5pt + black),
+      stroke: (y: rect-stroke),
       hide(name),
     )
   }
@@ -39,7 +40,7 @@
       width: 100% + 5pt,
       inset: (y: 2pt, x: 4pt),
       outset: (right: 3pt),
-      stroke: (y: 0.5pt + black, left: 0.5pt + black),
+      stroke: (y: rect-stroke, left: rect-stroke),
       name,
     )
   }
@@ -50,7 +51,7 @@
       width: 100% + 5pt,
       inset: (y: 2pt, x: 4pt),
       outset: (left: 8pt),
-      stroke: (y: 0.5pt + black, right: 0.5pt + black),
+      stroke: (y: rect-stroke, right: rect-stroke),
       align(right, name),
     )
   }

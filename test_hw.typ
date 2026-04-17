@@ -1,5 +1,4 @@
 #import "lib.typ": *
-#{ is-homework = true }
 #show: homework.with(
   homework-title: "Homework 5",
   course-number: "ME 324",

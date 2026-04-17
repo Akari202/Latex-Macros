@@ -159,8 +159,8 @@
   articleno = {721},
   numpages = {12},
   doi = {10.48550/arXiv.1912.01703},
-  url
-  ={https://proceedings.neurips.cc/paper_files/paper/2019/file/bdbca288fee7f92f2bfa9f7012727740-Paper.pdf}
+  url =
+  {https://proceedings.neurips.cc/paper_files/paper/2019/file/bdbca288fee7f92f2bfa9f7012727740-Paper.pdf}
 }
 
 @book{szeliski2022computer,
@@ -187,4 +187,255 @@
   Note = {Published electronically at \url{http://oeis.org}},
   Title = {The {O}n-{L}ine {E}ncyclopedia of {I}integer {S}equences},
   Year = 2026
+}
+
+@misc{toml,
+  author = {Preston-Werner, Tom and Gedam, Pradyun},
+  title = {{TOML}: Tom's Obvious Minimal Language},
+  year = {2025},
+  month = {Dec},
+  howpublished = {\url{https://toml.io/en/v1.1.0}},
+  note = {Accessed: 2026-03-30}
+}
+
+@article{skilling2004,
+  author = {Skilling, John},
+  title = {Programming the Hilbert curve},
+  journal = {AIP Conference Proceedings},
+  volume = {707},
+  number = {1},
+  pages = {381-387},
+  year = {2004},
+  month = {04},
+  abstract = {The Hilbert curve has previously been constructed
+    recursively, using p levels of recursion of n‐bit Gray codes to
+    attain a precision of p bits in n dimensions. Implementations have
+    reflected the awkwardness of aligning the recursive steps to
+    preserve geometrical adjacency. We point out that a single global
+    Gray code can instead be applied to all np bits of a Hilbert
+    length. Although this “over‐transforms” the length, the excess work
+    can be undone in a single pass over the bits, leading to compact
+  and efficient computer code.},
+  issn = {0094-243X},
+  doi = {10.1063/1.1751381},
+  url = {https://doi.org/10.1063/1.1751381},
+  eprint =
+  {https://pubs.aip.org/aip/acp/article-pdf/707/1/381/11557416/381_1_online.pdf},
+}
+
+@techreport{dam1998,
+  author      = {Erik B. Dam and Martin Koch and Martin Lillholm},
+  title       = {Quaternions, Interpolation and Animation},
+  institution = {Department of Computer Science, University of Copenhagen},
+  year        = {1998},
+  type        = {Technical Report},
+  number      = {DIKU-TR-98/5},
+  address     = {Copenhagen, Denmark},
+  url         = {https://web.mit.edu/2.998/www/QuaternionReport1.pdf},
+  month       = {July}
+}
+
+@misc{eberly2002,
+  author       = {David Eberly},
+  title        = {Quaternion Algebra and Calculus},
+  howpublished = {Magic Software, Inc.},
+  year         = {2002},
+  month        = {September},
+  note         = {Created March 2, 1999},
+  url          = {https://www.sci.utah.edu/~jmk/papers/Quaternions.pdf}
+}
+
+
+@techreport{naif2003,
+  title        = {Quaternions White Paper},
+  author       = {{Navigation and Ancillary Information Facility (NAIF)}},
+  institution  = {Jet Propulsion Laboratory, California Institute of
+  Technology},
+  year         = {2003},
+  month        = {November},
+  url          =
+  {https://naif.jpl.nasa.gov/pub/naif/misc/Quaternion_White_Paper/Quaternions_White_Paper.pdf}
+}
+
+@incollection{shoemake1992,
+  title = {III.6 - UNIFORM RANDOM ROTATIONS},
+  editor = {DAVID KIRK},
+  booktitle = {Graphics Gems III (IBM Version)},
+  publisher = {Morgan Kaufmann},
+  address = {San Francisco},
+  pages = {124-132},
+  year = {1992},
+  isbn = {978-0-12-409673-8},
+  doi = {https://doi.org/10.1016/B978-0-08-050755-2.50036-1},
+  url =
+  {https://www.sciencedirect.com/science/article/pii/B9780080507552500361},
+  author = {Ken Shoemake},
+  abstract = {Publisher Summary
+    A planar rotation can be represented in several ways—for example,
+    as an angle between 0 and 2π or as a unit complex number x + iy =
+    cos θ + i sin θ. Planar rotations combine by summing their angles
+    modulo 2π ; so one way to generate a uniform planar rotation is to
+    generate a uniform angle. This chapter describes a uniformly
+    distributed spatial rotation as one not having a uniformly
+    distributed angle. For a unit quaternion, the ω component is the
+    cosine of half the angle of rotation. When the angle is uniformly
+    distributed between 0 and 2π, the average magnitude of ω will be
+    2/π 0.6366, which exceeds the correct value for a uniform rotation
+    by a factor of 3/2. It is easy to generate random unit quaternions
+    and, hence, rotations with the correct distribution. Pairs of
+    independent variables with Gaussian distribution can easily be
+    generated using the polar or Box–Muller method, which transforms a
+    point uniformly distributed within the unit disk. The Gaussian
+    generation can be folded into the unit quaternion generation to
+  give an efficient algorithm.}
+}
+
+@article{pervin2018,
+  author = "Edward  Pervin and Jon A. Webb",
+  title = "{Quaternions in computer vision and robotics}",
+  year = "2018",
+  month = "6",
+  url =
+  "https://kilthub.cmu.edu/articles/journal_contribution/Quaternions_in_computer_vision_and_robotics/6608771",
+  doi = "10.1184/R1/6608771.v1"
+}
+
+
+@misc{sarkka2007,
+  author = {Simo Särkkä},
+  title  = {Notes on Quaternions},
+  year   = {2007},
+  month  = {June},
+  url    = {https://users.aalto.fi/~ssarkka/pub/quat.pdf},
+  note   = {Accessed: 2026-04-14}
+}
+
+@article{shoemake1985,
+  author = {Shoemake, Ken},
+  title = {Animating rotation with quaternion curves},
+  year = {1985},
+  isbn = {0897911660},
+  publisher = {Association for Computing Machinery},
+  address = {New York, NY, USA},
+  url = {https://doi.org/10.1145/325334.325242},
+  doi = {10.1145/325334.325242},
+  abstract = {Solid bodies roll and tumble through space. In computer
+    animation, so do cameras. The rotations of these objects are best
+    described using a four coordinate system, quaternions, as is shown
+    in this paper. Of all quaternions, those on the unit sphere are
+    most suitable for animation, but the question of how to construct
+    curves on spheres has not been much explored. This paper gives one
+    answer by presenting a new kind of spline curve, created on a
+    sphere, suitable for smoothly in-betweening (i.e. interpolating)
+    sequences of arbitrary rotations. Both theory and experiment show
+    that the motion generated is smooth and natural, without quirks
+  found in earlier methods.},
+  booktitle = {Proceedings of the 12th Annual Conference on Computer
+  Graphics and Interactive Techniques},
+  pages = {245–254},
+  numpages = {10},
+  keywords = {spline, spherical geometry, rotation, quaternion,
+    interpolation, in-betweening, approximation, animation, B-spline,
+  B\'{e}zier curve},
+  series = {SIGGRAPH '85}
+}
+
+@article{shepherd1978,
+  author = {Shepherd, Stanley W.},
+  title = {Quaternion from Rotation Matrix},
+  journal = {Journal of Guidance and Control},
+  volume = {1},
+  number = {3},
+  pages = {223-224},
+  year = {1978},
+  doi = {10.2514/3.55767b},
+  URL = {https://doi.org/10.2514/3.55767b},
+  eprint = {https://doi.org/10.2514/3.55767b}
+}
+
+@article{wu2019,
+  author = {Wu, Jin},
+  title = {Optimal Continuous Unit Quaternions from Rotation Matrices},
+  journal = {Journal of Guidance, Control, and Dynamics},
+  volume = {42},
+  number = {4},
+  pages = {919-922},
+  year = {2019},
+  doi = {10.2514/1.G004043},
+  URL = {https://doi.org/10.2514/1.G004043},
+  eprint = {https://doi.org/10.2514/1.G004043}
+}
+
+@misc{motekew2014,
+  author      = {Kurt A. Motekew},
+  title       = {Quaternion to DCM and Back Again},
+  month       = {April},
+  year        = {2014},
+  url         = {https://motoq.github.io/doc/tnotes/dcmq.pdf}
+}
+
+@techreport{crassidis2024,
+  author      = {John L. Crassidis},
+  title       = {Quaternion Identities},
+  institution = {NASA Engineering and Safety Center (NESC) Academy},
+  year        = {2024},
+  url         =
+  {https://nescacademy.nasa.gov/review/downloadfile.php?file=quat_ident.pdf&id=120&distr=Public},
+  note        = {Accessed: April 15, 2026}
+}
+
+
+@techreport{dantam2014,
+  author      = {Dantam, Neil},
+  title       = {Quaternion Computation},
+  institution = {Georgia Institute of Technology, Institute for
+  Robotics and Intelligent Machines},
+  address     = {Atlanta, GA, USA},
+  year        = {2014},
+  month       = {October},
+  note        = {Work in Progress -- Updated 2014-10-01},
+  url         = {http://www.neil.dantam.name/note/dantam-quaternion.pdf}
+}
+
+@article{markley2008,
+  author = {Markley, F. Landis},
+  title = {Unit Quaternion from Rotation Matrix},
+  journal = {Journal of Guidance, Control, and Dynamics},
+  volume = {31},
+  number = {2},
+  pages = {440-442},
+  year = {2008},
+  doi = {10.2514/1.31730},
+  URL = {https://doi.org/10.2514/1.31730},
+  eprint = {https://doi.org/10.2514/1.31730}
+}
+
+@InProceedings{sarabandi2019,
+  author="Sarabandi, Soheil
+  and Thomas, Federico",
+  editor="Lenarcic, Jadran
+  and Parenti-Castelli, Vincenzo",
+  title="Accurate Computation of Quaternions from Rotation Matrices",
+  booktitle="Advances in Robot Kinematics 2018",
+  year="2019",
+  publisher="Springer International Publishing",
+  address="Cham",
+  pages="39--46",
+  abstract="The main non-singular alternative to
+  {\$}{\$}3{\backslash}times 3{\$}{\$}proper orthogonal matrices, for
+  representing rotations in {\$}{\$}{\{}{\backslash}mathbb
+  R{\}}^3{\$}{\$}, is quaternions. Thus, it is important to have
+  reliable methods to pass from one representation to the other.
+  While passing from a quaternion to the corresponding rotation
+  matrix is given by Euler-Rodrigues formula, the other way round can
+  be performed in many different ways. Although all of them are
+  algebraically equivalent, their numerical behavior can be quite
+  different. In 1978, Shepherd proposed a method for computing the
+  quaternion corresponding to a rotation matrix which is considered
+  the most reliable method to date. Shepperd's method, thanks to a
+  voting scheme between four possible solutions, always works far
+  from formulation singularities. In this paper, we propose a new
+  method which outperforms Shepperd's method without increasing the
+  computational cost.",
+  isbn="978-3-319-93188-3"
 }

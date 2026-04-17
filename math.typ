@@ -6,6 +6,11 @@
 #let div = $bold(nabla)dot.c$
 #let curl = $bold(nabla)times$
 #let laplacian = $nabla^2$
+
+#let slerp = math.op("slerp")
+#let lerp = math.op("lerp")
+#let arctan2 = math.op("atan2")
+
 #let arcsin = $op(sin^(-1))$
 #let arccos = $op(cos^(-1))$
 #let arctan = $op(tan^(-1))$
@@ -24,6 +29,7 @@
 #let evalat(body, at) = $lr(#body |)_#at$
 #let evalover(body, from, to) = $lr(#body |)_#from^#to$
 // #let det(body) = $lr(|#body|)$
+#let norm(body) = $lr(||#body||)$
 // #let lim(var, to) = $op("lim", limits: #true)_(#var -> #to)$
 
 
