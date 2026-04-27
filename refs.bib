@@ -340,32 +340,6 @@
   series = {SIGGRAPH '85}
 }
 
-@article{shepherd1978,
-  author = {Shepherd, Stanley W.},
-  title = {Quaternion from Rotation Matrix},
-  journal = {Journal of Guidance and Control},
-  volume = {1},
-  number = {3},
-  pages = {223-224},
-  year = {1978},
-  doi = {10.2514/3.55767b},
-  URL = {https://doi.org/10.2514/3.55767b},
-  eprint = {https://doi.org/10.2514/3.55767b}
-}
-
-@article{wu2019,
-  author = {Wu, Jin},
-  title = {Optimal Continuous Unit Quaternions from Rotation Matrices},
-  journal = {Journal of Guidance, Control, and Dynamics},
-  volume = {42},
-  number = {4},
-  pages = {919-922},
-  year = {2019},
-  doi = {10.2514/1.G004043},
-  URL = {https://doi.org/10.2514/1.G004043},
-  eprint = {https://doi.org/10.2514/1.G004043}
-}
-
 @misc{motekew2014,
   author      = {Kurt A. Motekew},
   title       = {Quaternion to DCM and Back Again},
@@ -434,21 +408,50 @@
   publisher="Springer International Publishing",
   address="Cham",
   pages="39--46",
-  abstract="The main non-singular alternative to
-  {\$}{\$}3{\backslash}times 3{\$}{\$}proper orthogonal matrices, for
-  representing rotations in {\$}{\$}{\{}{\backslash}mathbb
-  R{\}}^3{\$}{\$}, is quaternions. Thus, it is important to have
-  reliable methods to pass from one representation to the other.
-  While passing from a quaternion to the corresponding rotation
-  matrix is given by Euler-Rodrigues formula, the other way round can
-  be performed in many different ways. Although all of them are
-  algebraically equivalent, their numerical behavior can be quite
-  different. In 1978, Shepherd proposed a method for computing the
-  quaternion corresponding to a rotation matrix which is considered
-  the most reliable method to date. Shepperd's method, thanks to a
-  voting scheme between four possible solutions, always works far
-  from formulation singularities. In this paper, we propose a new
-  method which outperforms Shepperd's method without increasing the
-  computational cost.",
-  isbn="978-3-319-93188-3"
+  url={https://digital.csic.es/bitstream/10261/179990/1/Accurate\%20Computation_Sarabandi.pdf},
+  doi = {
+    10.1007/978-3-319-93188-3_5
+  }
+  abstract={The main non-singular alternative to 3x3 proper
+    orthogonal matrices, for
+    representing rotations in R3, is quaternions. Thus, it is important to have
+    reliable methods to pass from one representation to the other.
+    While passing from a quaternion to the corresponding rotation
+    matrix is given by Euler-Rodrigues formula, the other way round can
+    be performed in many different ways. Although all of them are
+    algebraically equivalent, their numerical behavior can be quite
+    different. In 1978, Shepherd proposed a method for computing the
+    quaternion corresponding to a rotation matrix which is considered
+    the most reliable method to date. Shepperd's method, thanks to a
+    voting scheme between four possible solutions, always works far
+    from formulation singularities. In this paper, we propose a new
+    method which outperforms Shepperd's method without increasing the
+  computational cost.},
+  isbn={978-3-319-93188-3}
+}
+
+@article{shepherd1978,
+  author = {Shepherd, Stanley W.},
+  title = {Quaternion from Rotation Matrix},
+  journal = {Journal of Guidance and Control},
+  volume = {1},
+  number = {3},
+  pages = {223-224},
+  year = {1978},
+  doi = {10.2514/3.55767b},
+  URL = {https://doi.org/10.2514/3.55767b},
+  eprint = {https://doi.org/10.2514/3.55767b}
+}
+
+@article{wu2019,
+  author = {Wu, Jin},
+  title = {Optimal Continuous Unit Quaternions from Rotation Matrices},
+  journal = {Journal of Guidance, Control, and Dynamics},
+  volume = {42},
+  number = {4},
+  pages = {919-922},
+  year = {2019},
+  doi = {10.2514/1.G004043},
+  URL = {https://doi.org/10.2514/1.G004043},
+  eprint = {https://doi.org/10.2514/1.G004043}
 }
