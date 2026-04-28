@@ -155,6 +155,13 @@
   )
 }
 
+#let get-or-last(dictionary, key) = {
+  dictionary.at(
+    key,
+    default: dictionary.values().last(),
+  )
+}
+
 // For columns:
 // l:  left align
 // r:  right align
@@ -269,11 +276,13 @@
 
   (
     align: (x, y) => {
-      cols.at(str(x)).align + rows.at(str(y)).align
+      let vertical = get-or-last(rows, str(y))
+      let horizontal = get-or-last(cols, str(x))
+      vertical.align + horizontal.align
     },
     inset: (x, y) => {
-      let vertical = rows.at(str(y))
-      let horizontal = cols.at(str(x))
+      let vertical = get-or-last(rows, str(y))
+      let horizontal = get-or-last(cols, str(x))
       (
         left: horizontal.before.pad,
         right: horizontal.after.pad,
@@ -282,8 +291,8 @@
       )
     },
     stroke: (x, y) => {
-      let vertical = rows.at(str(y))
-      let horizontal = cols.at(str(x))
+      let vertical = get-or-last(rows, str(y))
+      let horizontal = get-or-last(cols, str(x))
       (
         left: get-stroke(horizontal.before.sep),
         right: get-stroke(horizontal.after.sep),

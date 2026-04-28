@@ -5,7 +5,9 @@
   margin: (x: 1in, y: 1in),
   landscape: false,
   bib: false,
+  placement: none,
   numbering: (equation: false, section: false),
+  slides: false,
   body,
 ) = {
   set document(
@@ -14,17 +16,18 @@
   )
 
   set page(
-    paper: "us-letter",
+    paper: if slides { "presentation-16-9" } else { "us-letter" },
     margin: margin,
     flipped: landscape,
   )
 
   set text(
     font: "New Computer Modern",
-    size: 11pt,
+    size: if slides { 22pt } else { 11pt },
   )
 
   set par(
+    linebreaks: "optimized",
     leading: 1.5em,
     justify: true,
     first-line-indent: 0pt,
@@ -51,6 +54,8 @@
     above: 1.7em,
     below: 1.7em,
   )
+
+  set figure(placement: placement)
 
   show raw.where(block: false): box.with(
     fill: gray.lighten(80%),
@@ -94,14 +99,15 @@
   title: none,
   header-center: [],
   bib: false,
+  placement: none,
   footer-right: [],
   continuing-messages: true,
   numbering: (equation: false, section: false),
+  show-title: false,
   body,
 ) = {
-  show: minimal-setup.with(title: title, bib: bib, numbering: numbering)
+  show: minimal-setup.with(title: title, bib: bib, placement: placement, numbering: numbering)
 
-  // Modified and customized from one-liner
   let fit-to-width(body) = context {
     let content-size = measure(body)
     if content-size.width > 0pt {
@@ -224,6 +230,18 @@
     },
   )
 
+  if show-title {
+    [
+      #metadata("title") <titlepage>
+      #align(center)[#title\ #author \ #(
+          datetime.today().display("[month repr:long] [day], [year]")
+        )]\
+      #line(length: 100%)\
+      #outline(depth: 2)
+      #pagebreak()
+    ]
+  }
+
   body
 }
 
@@ -235,12 +253,16 @@
   class-time: "",
   due-date: "",
   equation-numbering: false,
+  bib: false,
+  placement: none,
   body,
 ) = {
   show: setup.with(
     title: align(center + horizon)[#course-number \ #course \ #homework-title],
     header-center: [#course-number: #homework-title],
     numbering: (equation: equation-numbering, section: false),
+    bib: bib,
+    placement: placement,
   )
 
   align(center + horizon)[
