@@ -1,4 +1,4 @@
-#import "config.typ": author
+#import "config.typ": author, compile-host
 
 #let minimal-setup(
   title: none,
@@ -54,6 +54,45 @@
     above: 1.7em,
     below: 1.7em,
   )
+
+  show math.equation: it => if compile-host == "didactic" {
+    if it.block {
+      html.frame(it)
+    } else {
+      box(html.frame(it))
+    }
+  } else {
+    it
+  }
+
+  show line.where(length: 100%): it => if compile-host == "didactic" {
+    html.elem("hr")
+  } else {
+    it
+  }
+
+  show align: it => if compile-host == "didactic" {
+    html.elem("div", attrs: (style: "text-align: center;"), it.body)
+  } else {
+    it
+  }
+
+  show image: it => if compile-host == "didactic" {
+    let px_width = if it.width != auto {
+      str(it.width.pt()) + "px"
+    } else {
+      none
+    }
+
+    html.elem("img", attrs: (
+      src: it.path,
+      alt: it.alt,
+      title: it.alt,
+      width: px_width,
+    ))
+  } else {
+    it
+  }
 
   set figure(placement: placement)
 
@@ -233,7 +272,7 @@
   if show-title {
     [
       #metadata("title") <titlepage>
-      #align(center)[#title\ #author \ #(
+      #align(center)[#std.title()\ #author \ #(
           datetime.today().display("[month repr:long] [day], [year]")
         )]\
       #line(length: 100%)\
