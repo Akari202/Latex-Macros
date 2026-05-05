@@ -8,11 +8,15 @@
   placement: none,
   numbering: (equation: false, section: false),
   slides: false,
+  date: auto,
+  description: none,
   body,
 ) = {
   set document(
     title: title,
+    description: description,
     author: author,
+    date: date,
   )
 
   set page(
@@ -141,11 +145,20 @@
   placement: none,
   footer-right: [],
   continuing-messages: true,
+  description: none,
   numbering: (equation: false, section: false),
   show-title: false,
+  date: auto,
   body,
 ) = {
-  show: minimal-setup.with(title: title, bib: bib, placement: placement, numbering: numbering)
+  show: minimal-setup.with(
+    title: title,
+    bib: bib,
+    placement: placement,
+    numbering: numbering,
+    description: description,
+    date: date,
+  )
 
   let fit-to-width(body) = context {
     let content-size = measure(body)
@@ -273,7 +286,7 @@
     [
       #metadata("title") <titlepage>
       #align(center)[#std.title()\ #author \ #(
-          datetime.today().display("[month repr:long] [day], [year]")
+          date.display("[month repr:long] [day], [year]")
         )]\
       #line(length: 100%)\
       #outline(depth: 2)
@@ -302,6 +315,7 @@
     numbering: (equation: equation-numbering, section: false),
     bib: bib,
     placement: placement,
+    description: [#course-number #course #homework-title],
   )
 
   align(center + horizon)[

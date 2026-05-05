@@ -1,4 +1,4 @@
-#import "config.typ": __typ-utils, show-solutions
+#import "config.typ": __typ-utils, compile-host, show-solutions
 
 #let problem(body) = {
   counter("problem").step()
@@ -61,8 +61,12 @@
 }
 
 #let todo = {
-  // warn("There's still work to do!")
-  text(red)[TODO]
+  if compile-host == "didactic" {
+    html.elem("div", attrs: (style: "color: red;"), "TODO")
+  } else {
+    // warn("There's still work to do!")
+    text(red)[TODO]
+  }
 }
 
 #let oeis(id) = {
