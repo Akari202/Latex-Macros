@@ -121,40 +121,40 @@
 #let foot = unit([ft])
 #let ft = foot
 #let inch = unit([in])
-#let in_ = inch
+#let in- = inch
 #let thou = unit([thou])
 #let mil = thou
-#let nautical_mile = unit([nmi])
-#let nmi = nautical_mile
+#let nautical-mile = unit([nmi])
+#let nmi = nautical-mile
 #let cable = unit([cb])
 #let cb = cable
 #let fathom = unit([ftm])
 #let ftm = fathom
 
 // Area
-#let square_kilometer = unit($k m^2$)
-#let sq_km = square_kilometer
+#let square-kilometer = unit($k m^2$)
+#let sq-km = square-kilometer
 #let hectare = unit([ha])
 #let ha = hectare
-#let square_meter = unit($m^2$)
-#let sq_m = square_meter
-#let square_centimeter = unit($c m^2$)
-#let sq_cm = square_centimeter
-#let square_millimeter = unit($m m^2$)
-#let sq_mm = square_millimeter
-#let square_mile = unit($m i^2$)
-#let sq_mi = square_mile
+#let square-meter = unit($m^2$)
+#let sq-m = square-meter
+#let square-centimeter = unit($c m^2$)
+#let sq-cm = square-centimeter
+#let square-millimeter = unit($m m^2$)
+#let sq-mm = square-millimeter
+#let square-mile = unit($m i^2$)
+#let sq-mi = square-mile
 #let acre = unit([acre])
-#let square_yard = unit($y d^2$)
-#let sq_yd = square_yard
-#let square_foot = unit($f t^2$)
-#let sq_ft = square_foot
-#let square_inch = unit($i n^2$)
-#let sq_in = square_inch
+#let square-yard = unit($y d^2$)
+#let sq-yd = square-yard
+#let square-foot = unit($f t^2$)
+#let sq-ft = square-foot
+#let square-inch = unit($i n^2$)
+#let sq-in = square-inch
 
 // Volume
-#let cubic_meter = unit($m^3$)
-#let cu_m = cubic_meter
+#let cubic-meter = unit($m^3$)
+#let cu-m = cubic-meter
 #let liter = unit([L])
 #let L = liter
 #let deciliter = unit([dL])
@@ -170,8 +170,8 @@
 #let pint = unit([pt])
 #let pt = pint
 #let cup = unit([c])
-#let fluid_ounce = unit([fl oz])
-#let floz = fluid_ounce
+#let fluid-ounce = unit([fl oz])
+#let floz = fluid-ounce
 #let tablespoon = unit([tbsp])
 #let tbsp = tablespoon
 #let teaspoon = unit([tsp])
@@ -180,10 +180,10 @@
 #let bu = bushel
 #let peck = unit([pk])
 #let pk = peck
-#let cubic_foot = unit($f t^3$)
-#let cu_ft = cubic_foot
-#let cubic_inch = unit($i n^3$)
-#let cu_in = cubic_inch
+#let cubic-foot = unit($f t^3$)
+#let cu-ft = cubic-foot
+#let cubic-inch = unit($i n^3$)
+#let cu-in = cubic-inch
 
 // Mass
 #let tonne = unit([t])
@@ -208,28 +208,32 @@
 #let gr = grain
 
 // Speed
-#let kilometers_per_hour = unit([km/h])
-#let kph = kilometers_per_hour
-#let meters_per_second = unit($m / s$)
-#let mps = meters_per_second
-#let feet_per_second = unit($(f t) / s$)
-#let fps = feet_per_second
-#let miles_per_hour = unit([mph])
-#let mph = miles_per_hour
+#let kilometers-per-hour = unit([km/h])
+#let kph = kilometers-per-hour
+#let meters-per-second = unit($m / s$)
+#let mps = meters-per-second
+#let feet-per-second = unit($(f t) / s$)
+#let fps = feet-per-second
+#let miles-per-hour = unit([mph])
+#let mph = miles-per-hour
 #let knots = unit([kt])
 #let kn = knots
 
 // Acceleration
-#let meters_per_second_per_second = unit($m / s^2$)
-#let mpss = meters_per_second_per_second
-#let feet_per_second_per_second = unit($(f t) / s^2$)
-#let fps = feet_per_second_per_second
+#let meters-per-second-per-second = unit($m / s^2$)
+#let mpss = meters-per-second-per-second
+#let feet-per-second-per-second = unit($(f t) / s^2$)
+#let fps = feet-per-second-per-second
+#let earths-gravity = unit([g])
+#let g = earths-gravity
+#let speed-of-light = unit([c])
+#let c = speed-of-light
 
 // Pressure
-#let pounds_per_square_inch = unit([psi])
-#let psi = pounds_per_square_inch
-#let kips_per_square_inch = unit([ksi])
-#let ksi = kips_per_square_inch
+#let pounds-per-square-inch = unit([psi])
+#let psi = pounds-per-square-inch
+#let kips-per-square-inch = unit([ksi])
+#let ksi = kips-per-square-inch
 #let pascal = unit([Pa])
 #let Pa = pascal
 #let kilopascal = unit([kPa])
@@ -244,8 +248,8 @@
 #let N = newton
 #let kilopound = unit([kip])
 #let kip = kilopound
-#let pound_force = unit([lbf])
-#let lbf = pound_force
+#let pound-force = unit([lbf])
+#let lbf = pound-force
 #let slug = unit([slug])
 #let snail = unit([snail])
 

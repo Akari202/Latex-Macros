@@ -23,6 +23,7 @@
 
 #import "config.typ": author, compile-host, show-color
 #import "units.typ"
+#import "symb.typ"
 #import "cooking.typ"
 #import "draw.typ"
 #import "math.typ": *

@@ -30,6 +30,10 @@
 #let evalover(body, from, to) = $lr(#body |)_#from^#to$
 // #let det(body) = $lr(|#body|)$
 #let norm(body) = $lr(||#body||)$
+#let ab(body) = math.bold(math.arrow(body))
+#let ddot(body) = math.dot.double(body)
+#let ddb(body) = math.bold(math.dot.double(body))
+#let db(body) = math.bold(math.dot(body))
 // #let lim(var, to) = $op("lim", limits: #true)_(#var -> #to)$
 
 
