@@ -286,7 +286,9 @@
     [
       #metadata("title") <titlepage>
       #align(center)[#std.title()\ #author \ #(
-          date.display("[month repr:long] [day], [year]")
+          if date == auto {
+            datetime.today()
+          } else { date }.display("[month repr:long] [day], [year]")
         )]\
       #line(length: 100%)\
       #outline(depth: 2)

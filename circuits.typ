@@ -39,7 +39,7 @@
   number-format: "a",
   scale-text: true,
 ) = {
-  import "@preview/cetz:0.4.2"
+  import "@preview/cetz:0.5.1"
   let positions = (
     (-1, 0),
     (1, 0),

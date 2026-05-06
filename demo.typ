@@ -4,6 +4,8 @@
 #import "lib.typ": circuits.__all-components, circuits.draw-circuit
 #import units: Mohm, degC, degF, degK, degR, kohm, mpss, ohm, prefix, rankine, volts
 #import constants: g
+#import cooking: format-ammount
+#import keyboard: *
 #show: minimal-setup.with(
   title: "Demo",
   margin: (x: 0.5in, y: 0.5in),
@@ -124,7 +126,7 @@ $#value #rankine = #temperature(value, \"R\", want: \"C\")$",
         \"25\": \"Bob's Birthday (calceled)\",
         \"13\": \"Break first day\",
         \"22\": \"Break last day\",
-        \"30\": \"Smash Mouth concert (still on)\",
+        \"30\": \"Smash Mouth concert\",
       ),
     ),
   ),
@@ -154,4 +156,17 @@ $#value #rankine = #temperature(value, \"R\", want: \"C\")$",
 ]",
   scope: (problem: problem, hint: hint, solution: solution, ilaplace: ilaplace, boxed: boxed),
   caption: "homework problems",
+)
+
+#typst-example(
+  "#format-ammount(tbsp: 20)",
+  scope: (format-ammount: format-ammount),
+  caption: "format cooking measures",
+)
+
+#typst-example(
+  "#draw-keyboard(keymap: qwerty, unit: 0.75cm, hide-number-row: false)
+#draw-keyboard(keymap: colemak-dh, unit: 0.75cm, diff: qwerty)",
+  scope: (draw-keyboard: draw-keyboard, colemak-dh: colemak-dh, qwerty: qwerty),
+  caption: "keyboard layout with diffing",
 )

@@ -29,6 +29,7 @@
 #import "math.typ": *
 #import "constants.typ"
 #import "circuits.typ"
+#import "keyboard.typ"
 #import "calendar.typ": month-calendar, range-calendar
 #import "setups.typ": *
 #import "util.typ": *
