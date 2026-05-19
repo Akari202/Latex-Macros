@@ -1,5 +1,12 @@
 #import "config.typ": author, compile-host
 
+#let debug(body) = {
+  show box: it => rect(stroke: red + 1pt, inset: 0pt, outset: 0pt, it)
+  show heading: it => rect(stroke: blue + 1pt, inset: 0pt, outset: 0pt, it)
+  show text: it => rect(stroke: blue + 0.1pt, inset: 0pt, outset: 0pt, it)
+  body
+}
+
 #let minimal-setup(
   title: none,
   margin: (x: 1in, y: 1in),
@@ -54,6 +61,8 @@
     none
   })
 
+  set enum(numbering: "1.a.i.")
+
   show math.equation: set block(
     above: 1.7em,
     below: 1.7em,
@@ -82,18 +91,21 @@
   }
 
   show image: it => if compile-host == "didactic" {
-    let px_width = if it.width != auto {
-      str(it.width.pt()) + "px"
+    let width = if it.width != auto {
+      (width: str(it.width.length.pt()))
     } else {
-      none
+      (:)
     }
 
-    html.elem("img", attrs: (
-      src: it.path,
-      alt: it.alt,
-      title: it.alt,
-      width: px_width,
-    ))
+    html.elem(
+      "img",
+      attrs: (
+        src: it.source,
+        alt: it.alt,
+        title: it.alt,
+      )
+        + width,
+    )
   } else {
     it
   }

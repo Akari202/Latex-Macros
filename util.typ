@@ -69,6 +69,15 @@
   }
 }
 
+#let todo-lorem(count) = {
+  if compile-host == "didactic" {
+    html.elem("div", attrs: (style: "color: red;"), lorem(count))
+  } else {
+    // warn("There's still work to do!")
+    text(red, lorem(count))
+  }
+}
+
 #let oeis(id) = {
   link("https://oeis.org/" + str(id), id)
 }
@@ -333,4 +342,37 @@
 
 #let boxed(body) = {
   rect(body, outset: 4pt, stroke: 0.5pt)
+}
+
+#let make-array(body) = {
+  if type(body) == array { body } else { (body,) }
+}
+
+#let merge-dictionaries(..args, always-make-array: false) = {
+  let args = args.pos()
+  let result = args.first()
+
+  if args.len() != 1 {
+    for i in args.slice(1) {
+      for (j, k) in i {
+        if j in result {
+          let old = result.at(j)
+          if type(old) == dictionary and type(k) == dictionary {
+            result.insert(j, merge-dictionaries(old, k, always-make-array: always-make-array))
+          } else {
+            let new-value = if type(old) == type(k) and not always-make-array {
+              old + k
+            } else {
+              make-array(old) + make-array(k)
+            }
+            result.insert(j, new-value)
+          }
+        } else {
+          result.insert(j, k)
+        }
+      }
+    }
+  }
+
+  return result
 }

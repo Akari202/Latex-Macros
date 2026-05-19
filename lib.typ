@@ -21,16 +21,17 @@
 // Additionally WASM plugin function names will follow Rust and be snake_case
 // Internal typst variables are inconsistent and need to be fixed
 
-#import "config.typ": author, compile-host, show-color
+#import "config.typ": author, compile-host, handout-mode, show-color
 #import "units.typ"
 #import "symb.typ"
 #import "cooking.typ"
 #import "draw.typ"
 #import "math.typ": *
 #import "constants.typ"
+#import "husky-slides.typ"
 #import "circuits.typ"
 #import "keyboard.typ"
-#import "calendar.typ": month-calendar, range-calendar
+#import "calendar/mod.typ": *
 #import "setups.typ": *
 #import "util.typ": *
 
