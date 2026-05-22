@@ -1,4 +1,4 @@
-#import "util.typ": get-month-day-count, pad-str
+#import "util.typ": get-month-day-count, int-to-month, pad-str
 #import "../util.typ": make-array
 
 #let prefixes = (
@@ -13,6 +13,7 @@
   "canada day": emoji.leaf.maple,
   "cinco de mayo": emoji.skull,
   "pi day": emoji.pie,
+  "trans ": "\u{1F3F3}\u{FE0F}\u{200D}\u{26A7}\u{FE0F}",
   "concert": emoji.notes.triple,
   "thanksgiving": emoji.turkey,
   "halloween": emoji.ghost,
@@ -29,7 +30,7 @@
 
   if lowercase.ends-with(" middle day hidden") {
     let name = body.replace(" middle day hidden", "", count: 1).replace("_", "")
-    return block(
+    block(
       width: 100% + 10pt,
       inset: (y: 2pt, x: 4pt),
       outset: (left: 8pt, right: -2pt),
@@ -37,44 +38,54 @@
       hide(name),
       // name,
     )
-  }
-
-  if lowercase.ends-with(" first day") {
+  } else if lowercase.ends-with("spacer hidden") {
+    let name = body.replace(" middle day hidden", "", count: 1).replace("_", "")
+    block(
+      width: 100% + 10pt,
+      inset: (y: 2pt, x: 4pt),
+      outset: (left: 8pt, right: -2pt),
+      stroke: none,
+      hide(name),
+      // name,
+    )
+  } else if lowercase.ends-with(" first day") {
     let name = body.replace(" first day", "", count: 1).replace("_", "")
-    return block(
+    block(
       width: 100% + 5pt,
       inset: (y: 2pt, x: 4pt),
       outset: (right: 3pt),
       stroke: (y: rect-stroke, left: rect-stroke),
       name,
     )
-  }
-
-  if lowercase.ends-with(" last day") {
+  } else if lowercase.ends-with(" last day") {
     let name = body.replace(" last day", "", count: 1).replace("_", "")
-    return block(
+    block(
       width: 100% + 5pt,
       inset: (y: 2pt, x: 4pt),
       outset: (left: 8pt),
       stroke: (y: rect-stroke, right: rect-stroke),
       align(right, name),
     )
-  }
-
-  for (pattern, prefix) in prefixes {
-    if pattern in lowercase {
-      return block[#prefix #body]
+  } else {
+    for (pattern, prefix) in prefixes {
+      if pattern in lowercase {
+        return block[#prefix #body]
+      }
     }
-  }
 
-  return block(body)
+    block(body)
+  }
 }
 
-#let month-calendar(date, events: (:)) = {
-  assert(date.day() == 1, message: "Date should be the first day of the month")
-  let month-name = date.display("[month repr:long]")
-  let day-count = get-month-day-count(date.year(), date.month())
-  let empty-leading-days = int(date.display("[weekday repr:monday]")) - 1
+#let month-calendar(date, events: (:), highlight-today: true) = {
+  let day-count = get-month-day-count(date.year, date.month)
+  let empty-leading-days = (
+    int(datetime(year: date.year, month: date.month, day: 1).display("[weekday repr:monday]")) - 1
+  )
+  let today = datetime.today()
+  let highlight-today = (
+    highlight-today and today.year() == date.year and today.month() == date.month
+  )
 
   let size-name(body) = layout(size => {
     context {
@@ -86,8 +97,10 @@
     }
   })
 
+  set par(spacing: 0.9em)
+
   box(height: 100% - 1.5em, {
-    block(below: 0.5em)[= #date.display("[month repr:long] [year]")]
+    block(below: 0.5em)[= #int-to-month(date.month) #date.year]
     table(
       columns: 7,
       rows: (auto,) + (1fr,) * 6,
@@ -119,12 +132,19 @@
       ..range(0, empty-leading-days).map(_ => []),
       ..range(1, day-count + 1).map(i => {
         box(inset: 1pt, width: 100%, {
-          align(right, text(size: 0.8em)[#i])
+          grid(
+            columns: (1fr, 1fr),
+            if highlight-today and today.day() == i {
+              align(left, text(size: 0.8em, fill: blue)[Today])
+            } else { [] },
+            align(right, text(size: 0.8em)[#i]),
+          )
           let day-events = events.at(
             pad-str(i),
             default: none,
           )
           if day-events != none {
+            set par(spacing: 0.75em, leading: 0.25em)
             let day-events = make-array(day-events)
             box(
               inset: 2pt,

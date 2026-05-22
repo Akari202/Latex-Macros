@@ -27,16 +27,16 @@
   }
 
   // TODO: Waiting till this feature gets released. PR: 7284
-  // let ranges = ranges.filter(i => {
-  //   i.at("start", default: none) != none and i.at("end", default: none) != none
-  // })
-  let filtered-ranges = (:)
-  for (event, range) in ranges {
-    if range.at("start", default: none) != none and range.at("end", default: none) != none {
-      filtered-ranges.insert(event, range)
-    }
-  }
-  let ranges = filtered-ranges
+  let ranges = ranges.filter(i => {
+    i.at("start", default: none) != none and i.at("end", default: none) != none
+  })
+  // let filtered-ranges = (:)
+  // for (event, range) in ranges {
+  //   if range.at("start", default: none) != none and range.at("end", default: none) != none {
+  //     filtered-ranges.insert(event, range)
+  //   }
+  // }
+  // let ranges = filtered-ranges
 
   for (event, range) in ranges {
     let day-count = (range.end - range.start).days()
@@ -66,62 +66,55 @@
   events: (:),
   annual-events: (:),
   add-holidays: true,
+  highlight-today: true,
 ) = {
-  // moving-holidays(2026, 5)
-  // moving-holidays(2027, 5)
-  // return
-  if type(start.month) == str {
-    start.month = month-to-int(start.month)
-  }
+  let start = parse-date(start)
+  let end = if type(end) == int { add-months-to-date(start, end - 1) } else { parse-date(end) }
 
-  let month-count = if type(end) == int {
-    end
-  } else {
-    (end.year - start.year) * 12 + end.month - start.month + 1
-  }
+  let month-count = months-between(start, end)
+  let year-count = years-between(start, end)
 
-  let year-range = range(start.year, start.year + calc.ceil((start.month + month-count) / 12))
-  let annual-events = if type(annual-events) == str {
-    toml(annual-events)
-  } else if type(annual-events) == array {
-    merge-dictionaries(annual-events.map(i => { toml(i) }))
-  } else {
-    annual-events
-  }
-  let events = process-ranges(
+  let year-range = range(start.year, end.year + 1)
+
+  let annual-events = parse-event-input(annual-events)
+  let events = parse-event-input(events)
+  let all-events = process-ranges(
     merge-dictionaries(
-      if type(events) == str {
-        toml(events)
-      } else if type(events) == array {
-        merge-dictionaries(events.map(i => { toml(i) }))
-      } else {
-        events
-      },
-      if add-holidays {
-        merge-dictionaries(
-          ..year-range.map(
-            i => (str(i): fixed-holidays),
-          ),
+      events,
+      ..if add-holidays {
+        year-range.map(
+          i => (str(i): fixed-holidays),
         )
       } else {
-        (:)
+        ((:),)
       },
-      merge-dictionaries(
-        ..year-range.map(
-          i => (str(i): annual-events),
-        ),
+      ..if add-holidays {
+        year-range.map(
+          i => (str(i): moving-holidays(i)),
+        )
+      } else {
+        ((:),)
+      },
+      ..year-range.map(
+        i => (str(i): annual-events),
       ),
-      always-make-array: true,
     ),
   )
 
-  for i in range(month-count) {
-    let total-months = (start.month - 1) + i
-    let year = int(start.year + (total-months / 12))
-    let month = int(calc.rem(total-months, 12) + 1)
+  let date = start
+  while date.year <= end.year and date.month <= end.month {
     month-calendar(
-      datetime(year: year, month: month, day: 1),
-      events: events.at(str(year), default: (:)).at(int-to-month(month), default: (:)),
+      date,
+      events: all-events
+        .at(str(date.year), default: (:))
+        .at(int-to-month(date.month), default: (:)),
+      highlight-today: highlight-today,
     )
+
+    date.month += 1
+    if date.month > 12 {
+      date.month = 1
+      date.year += 1
+    }
   }
 }

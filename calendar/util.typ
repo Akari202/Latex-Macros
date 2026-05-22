@@ -93,3 +93,62 @@
 
   return merge-dictionaries(events, new-event)
 }
+
+// Allowable input formats
+// int
+// str
+#let parse-month(month) = {
+  let month-type = type(month)
+  if month-type == str {
+    month-to-int(month)
+  } else if month-type == int {
+    month
+  } else {
+    assert(false, message: "Unable to parse month")
+  }
+}
+
+// Allowable input formats
+// datetime
+// dict: (year: int, month: int/str)
+#let parse-date(date) = {
+  let date-type = type(date)
+  if date-type == datetime {
+    (year: date.year(), month: date.month())
+  } else if date-type == dictionary {
+    (year: date.year, month: parse-month(date.month))
+  } else {
+    assert(false, message: "Unable to parse date")
+  }
+}
+
+#let add-months-to-date(start, count) = {
+  (
+    year: start.year + calc.floor((start.month + count) / 12),
+    month: calc.rem(start.month + count, 12),
+  )
+}
+
+#let months-between(start, end) = {
+  (end.year - start.year) * 12 + end.month - start.month + 1
+}
+
+// Years between might be misleading, actually is the number of years touched by the range
+#let years-between(start, end) = {
+  calc.ceil((start.month + months-between(start, end) - 1) / 12)
+}
+
+// Acceptable inputs
+// str
+// list: (str/dict)
+// dict
+#let parse-event-input(input) = {
+  let input-type = type(input)
+  if input-type == str {
+    toml(input)
+  } else if input-type == array {
+    merge-dictionaries(input.map(i => { parse-event-input(i) }))
+  } else {
+    input
+  }
+}

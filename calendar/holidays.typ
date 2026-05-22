@@ -77,46 +77,41 @@
   last-day - calc.rem(last-weekday - weekday-to-int(weekday) + 7, 7) - (n - 1) * 7
 }
 
-#let moving-holidays(year, month) = {
-  if month == 3 {
-    (pad-str(nth-weekday-of-month(year, month, 2, "Sunday")): "Daylight savings time starts")
-  } else if month == 5 {
-    merge-dictionaries(
-      (pad-str(nth-weekday-of-month(year, month, 2, "Sunday")): "Mother's day"),
-      (pad-str(nth-to-last-weekday-of-month(year, month, 1, "Monday")): "Memorial day"),
-      (pad-str(nth-to-last-weekday-before(year, month, 1, "Monday", 24)): "Victoria day"),
-      always-make-array: true,
-    )
-  } else if month == 6 {
-    (pad-str(nth-weekday-of-month(year, month, 3, "Sunday")): "Father's day")
-  }
+#let moving-holidays(year) = {
+  (
+    March: (pad-str(nth-weekday-of-month(year, 3, 2, "Sunday")): "Daylight savings time starts"),
+    May: merge-dictionaries(
+      (pad-str(nth-weekday-of-month(year, 5, 2, "Sunday")): "Mother's day"),
+      (pad-str(nth-to-last-weekday-of-month(year, 5, 1, "Monday")): "Memorial day"),
+      (pad-str(nth-to-last-weekday-before(year, 5, 1, "Monday", 24)): "Victoria day"),
+    ),
+    June: (pad-str(nth-weekday-of-month(year, 6, 3, "Sunday")): "Father's day"),
+    September: (pad-str(nth-weekday-of-month(year, 9, 1, "Monday")): "Labor day"),
+    October: (
+      pad-str(nth-weekday-of-month(year, 10, 2, "Monday")): (
+        "Canadian Thanksgiving",
+        "Indigeonous people's day",
+        "Columbus day",
+      ),
+    ),
+    November: merge-dictionaries(
+      (pad-str(nth-weekday-of-month(year, 11, 1, "Sunday")): "Daylight savings time ends"),
+      (pad-str(nth-weekday-of-month(year, 11, 4, "Thursday")): "Thanksgiving"),
+      (pad-str(nth-weekday-of-month(year, 11, 4, "Thursday") + 1): "Black Friday"),
+      if calc.rem(year, 2) == 0 {
+        (pad-str(nth-weekday-of-month(year, 11, 1, "Monday") + 1): "Election day")
+      } else {
+        (:)
+      },
+    ),
+  )
 }
-
-// #let __fixed-holidays = (
 
 //   April: (
 //     "03": "Good Friday",
 //     "05": "Easter Sunday",
 //     "06": "Easter Monday",
 //   ),
-
 //   July: (
 //     "03": "Independence day (observed)",
 //   ),
-//   September: (
-//     "07": "Labor day",
-//   ),
-//   October: (
-//     "12": (
-//       "Indigeonous people's day",
-//       "Columbus day",
-//       "Canadian Thanksgiving",
-//     ),
-//   ),
-//   November: (
-//     "01": "Daylight savings time ends",
-//     "03": "Election day",
-//     "26": "Thanksgiving",
-//     "27": "Black friday",
-//   ),
-// )

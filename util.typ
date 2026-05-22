@@ -348,11 +348,11 @@
   if type(body) == array { body } else { (body,) }
 }
 
-#let merge-dictionaries(..args, always-make-array: false) = {
+#let merge-dictionaries(..args, always-make-array: true) = {
   let args = args.pos()
-  let result = args.first()
+  let result = if args.len() > 0 { args.first() } else { (:) }
 
-  if args.len() != 1 {
+  if args.len() > 1 {
     for i in args.slice(1) {
       for (j, k) in i {
         if j in result {

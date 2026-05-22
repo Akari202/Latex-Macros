@@ -122,12 +122,16 @@ $#value #rankine = #temperature(value, \"R\", want: \"C\")$",
   events: (
     \"2020\": (
       \"March\": (
-        \"03\": \"Alice's Birthday\",
-        \"25\": \"Bob's Birthday (calceled)\",
         \"13\": \"Break first day\",
         \"22\": \"Break last day\",
         \"30\": \"Smash Mouth concert\",
       ),
+    ),
+  ),
+  annual-events: (
+    \"March\": (
+      \"03\": \"Alice's birthday\",
+      \"25\": \"Bob's birthday (calcelled)\",
     ),
   ),
   add-holidays: true,
