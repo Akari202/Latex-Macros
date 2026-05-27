@@ -28,7 +28,6 @@
 #import "draw.typ"
 #import "math.typ": *
 #import "constants.typ"
-#import "husky-slides.typ"
 #import "circuits.typ"
 #import "keyboard.typ"
 #import "calendar/mod.typ": *
