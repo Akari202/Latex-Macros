@@ -1,9 +1,12 @@
 #import "config.typ": author, compile-host
 
 #let debug(body) = {
-  show box: it => rect(stroke: red + 1pt, inset: 0pt, outset: 0pt, it)
+  set block(stroke: green + 0.2pt)
+  set box(stroke: red + 1pt)
   show heading: it => rect(stroke: blue + 1pt, inset: 0pt, outset: 0pt, it)
-  show text: it => rect(stroke: blue + 0.1pt, inset: 0pt, outset: 0pt, it)
+  show hide: it => {
+    text(fill: orange, it.body)
+  }
   body
 }
 
@@ -96,15 +99,19 @@
     } else {
       (:)
     }
+    let alt-title = if it.alt != none {
+      (alt: it.alt, title: it.alt)
+    } else {
+      (:)
+    }
 
     html.elem(
       "img",
       attrs: (
         src: it.source,
-        alt: it.alt,
-        title: it.alt,
       )
-        + width,
+        + width
+        + alt-title,
     )
   } else {
     it

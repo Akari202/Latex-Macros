@@ -27,16 +27,16 @@
   }
 
   // TODO: Waiting till this feature gets released. PR: 7284
-  let ranges = ranges.filter(i => {
-    i.at("start", default: none) != none and i.at("end", default: none) != none
-  })
-  // let filtered-ranges = (:)
-  // for (event, range) in ranges {
-  //   if range.at("start", default: none) != none and range.at("end", default: none) != none {
-  //     filtered-ranges.insert(event, range)
-  //   }
-  // }
-  // let ranges = filtered-ranges
+  // let ranges = ranges.filter(i => {
+  //   i.at("start", default: none) != none and i.at("end", default: none) != none
+  // })
+  let filtered-ranges = (:)
+  for (event, range) in ranges {
+    if range.at("start", default: none) != none and range.at("end", default: none) != none {
+      filtered-ranges.insert(event, range)
+    }
+  }
+  let ranges = filtered-ranges
 
   for (event, range) in ranges {
     let day-count = (range.end - range.start).days()
@@ -67,6 +67,7 @@
   annual-events: (:),
   add-holidays: true,
   highlight-today: true,
+  duration-hints: true,
 ) = {
   let start = parse-date(start)
   let end = if type(end) == int { add-months-to-date(start, end - 1) } else { parse-date(end) }
@@ -109,6 +110,7 @@
         .at(str(date.year), default: (:))
         .at(int-to-month(date.month), default: (:)),
       highlight-today: highlight-today,
+      duration-hints: duration-hints,
     )
 
     date.month += 1

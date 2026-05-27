@@ -308,5 +308,7 @@ TSWLatexianTemp*
 physica.typ
 signals.typ
 Typst\ Reference.typ
+*.html
 
 target/
+

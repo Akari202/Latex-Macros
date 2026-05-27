@@ -15,7 +15,6 @@
     "31": "Trans day of visibility",
   ),
   April: (
-    // "09": "Vimmy Ridge day",
     "15": "Tax day",
   ),
   May: (
@@ -79,6 +78,8 @@
 
 #let moving-holidays(year) = {
   (
+    January: (pad-str(nth-weekday-of-month(year, 1, 3, "Monday")): "Martin Luther King Jr. day"),
+    February: (pad-str(nth-weekday-of-month(year, 2, 3, "Monday")): "Presidents day"),
     March: (pad-str(nth-weekday-of-month(year, 3, 2, "Sunday")): "Daylight savings time starts"),
     May: merge-dictionaries(
       (pad-str(nth-weekday-of-month(year, 5, 2, "Sunday")): "Mother's day"),

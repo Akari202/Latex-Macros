@@ -13,7 +13,7 @@
   "canada day": emoji.leaf.maple,
   "cinco de mayo": emoji.skull,
   "pi day": emoji.pie,
-  "trans ": "\u{1F3F3}\u{FE0F}\u{200D}\u{26A7}\u{FE0F}",
+  "trans ": "🏳️‍⚧️",
   "concert": emoji.notes.triple,
   "thanksgiving": emoji.turkey,
   "halloween": emoji.ghost,
@@ -23,7 +23,7 @@
 )
 
 
-#let display-event(body) = {
+#let display-event(body, is-monday: false) = {
   let lowercase = lower(body)
 
   let rect-stroke = 0.25pt + black
@@ -35,8 +35,7 @@
       inset: (y: 2pt, x: 4pt),
       outset: (left: 8pt, right: -2pt),
       stroke: (y: rect-stroke),
-      hide(name),
-      // name,
+      if is-monday { text(fill: gray.darken(10%), name) } else { hide(name) },
     )
   } else if lowercase.ends-with("spacer hidden") {
     let name = body.replace(" middle day hidden", "", count: 1).replace("_", "")
@@ -77,7 +76,7 @@
   }
 }
 
-#let month-calendar(date, events: (:), highlight-today: true) = {
+#let month-calendar(date, events: (:), highlight-today: true, duration-hints: true) = {
   let day-count = get-month-day-count(date.year, date.month)
   let empty-leading-days = (
     int(datetime(year: date.year, month: date.month, day: 1).display("[weekday repr:monday]")) - 1
@@ -148,8 +147,12 @@
             let day-events = make-array(day-events)
             box(
               inset: 2pt,
-              for i in day-events {
-                text(size: 0.7em, display-event(i))
+              for j in day-events {
+                text(size: 0.7em, display-event(
+                  j,
+                  is-monday: duration-hints
+                    and (calc.rem(i + empty-leading-days - 1, 7) == 0 or i == 1),
+                ))
               },
             )
           }

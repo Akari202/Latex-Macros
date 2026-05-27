@@ -12,6 +12,7 @@
   landscape: true,
 )
 
+#show: debug
 #assert.eq(prefix(1234, ohm, offset: 3), prefix(1234000, ohm))
 #assert.eq(prefix(1234, ohm, offset: -3), prefix(1.234, ohm))
 
@@ -170,8 +171,16 @@ $#value #rankine = #temperature(value, \"R\", want: \"C\")$",
 )
 
 #typst-example(
-  "#draw-keyboard(keymap: qwerty, unit: 0.75cm, hide-number-row: false)
-#draw-keyboard(keymap: colemak-dh, unit: 0.75cm, diff: qwerty)",
+  "#draw-keyboard(
+  keymap: qwerty,
+  unit: 0.75cm,
+  hide-number-row: false
+)
+#draw-keyboard(
+  keymap: colemak-dh,
+  unit: 0.75cm,
+  diff: qwerty
+)",
   scope: (draw-keyboard: draw-keyboard, colemak-dh: colemak-dh, qwerty: qwerty),
   caption: "keyboard layout with diffing",
 )
