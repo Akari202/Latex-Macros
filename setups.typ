@@ -94,8 +94,13 @@
   }
 
   show image: it => if compile-host == "didactic" {
-    let width = if it.width != auto {
-      (width: str(it.width.length.pt()))
+    let width = if type(it.width) == relative {
+      let length = it.width.length.to-absolute()
+      if length == 0pt {
+        (width: str(it.width.ratio / 1%) + "%")
+      } else {
+        (width: str((length * it.width.ratio).pt()) + "px")
+      }
     } else {
       (:)
     }
@@ -128,7 +133,10 @@
     radius: 2pt,
   )
 
-  show raw.where(block: true): block.with(
+  show figure.where(kind: raw): set block(breakable: true)
+  show raw.where(block: true): set par(leading: 1em)
+
+  show raw.where(block: true): set block(
     fill: gray.lighten(90%),
     stroke: gray,
     inset: (x: 8pt, y: 5pt),
