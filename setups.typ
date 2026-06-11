@@ -71,7 +71,7 @@
     below: 1.7em,
   )
 
-  show math.equation: it => if compile-host == "didactic" {
+  show math.equation: it => if compile-host == "didactic" and sys.version < version(0, 15, 0) {
     if it.block {
       html.frame(it)
     } else {
@@ -149,6 +149,11 @@
   set pagebreak(
     weak: true,
   )
+  show pagebreak: it => if compile-host == "didactic" {
+    []
+  } else {
+    it
+  }
 
   set bibliography(
     style: "american-society-of-mechanical-engineers",

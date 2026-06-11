@@ -39,7 +39,6 @@
   number-format: "a",
   scale-text: true,
 ) = {
-  import "@preview/cetz:0.5.1"
   let positions = (
     (-1, 0),
     (1, 0),
@@ -90,6 +89,7 @@
     }
   }
 
+  import "@preview/cetz:0.5.2"
   cetz.canvas({
     cetz.draw.set-style(stroke: (cap: "square"))
     cetz.draw.set-style(stroke: stroke)

@@ -11,6 +11,8 @@
 // Notes: https://typst.app/universe/package/drafting
 // Slides: https://polylux.dev/book/getting-started/getting-started.html
 //
+// I really should check out Parsley
+// Also need to update sertyp
 //
 // Some of the derivative macros were modified from/inspired by Physica
 //
@@ -25,7 +27,6 @@
 #import "units.typ"
 #import "symb.typ"
 #import "cooking.typ"
-#import "draw.typ"
 #import "math.typ": *
 #import "constants.typ"
 #import "circuits.typ"

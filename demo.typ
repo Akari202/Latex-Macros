@@ -1,5 +1,4 @@
 #import "lib.typ": *
-#import "@preview/cetz:0.4.2"
 #import "@preview/simple-plot:0.3.0": line-plot, plot
 #import "lib.typ": circuits.__all-components, circuits.draw-circuit
 #import units: Mohm, degC, degF, degK, degR, kohm, mpss, ohm, prefix, rankine, volts
@@ -12,7 +11,7 @@
   landscape: true,
 )
 
-#show: debug
+// #show: debug
 #assert.eq(prefix(1234, ohm, offset: 3), prefix(1234000, ohm))
 #assert.eq(prefix(1234, ohm, offset: -3), prefix(1.234, ohm))
 

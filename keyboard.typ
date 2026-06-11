@@ -15,7 +15,7 @@
     paint: black,
   ),
 ) = {
-  import "@preview/cetz:0.5.1"
+  import "@preview/cetz:0.5.2"
   cetz.canvas({
     cetz.draw.set-style(stroke: style)
     import cetz.draw: *

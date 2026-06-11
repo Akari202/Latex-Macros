@@ -2,7 +2,7 @@
 #import "../util.typ": merge-dictionaries
 
 #let fixed-holidays = (
-  January: ("01": "New Year's day", "30": "Fred Korematsu day"),
+  January: ("01": "New Year's day", "27": "Holocaust Remembrance Day", "30": "Fred Korematsu day"),
   February: ("14": "Velentine's day", "19": "Day of Remembrance"),
   March: (
     "14": (

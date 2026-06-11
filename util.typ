@@ -11,6 +11,8 @@
   body
 }
 
+#let hr = line(length: 100%)
+
 #let part(body) = {
   counter("part").step()
 

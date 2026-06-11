@@ -27,16 +27,19 @@
   }
 
   // TODO: Waiting till this feature gets released. PR: 7284
-  // let ranges = ranges.filter(i => {
-  //   i.at("start", default: none) != none and i.at("end", default: none) != none
-  // })
-  let filtered-ranges = (:)
-  for (event, range) in ranges {
-    if range.at("start", default: none) != none and range.at("end", default: none) != none {
-      filtered-ranges.insert(event, range)
+  let ranges = if sys.version < version(0, 15, 0) {
+    let filtered-ranges = (:)
+    for (event, range) in ranges {
+      if range.at("start", default: none) != none and range.at("end", default: none) != none {
+        filtered-ranges.insert(event, range)
+      }
     }
+    filtered-ranges
+  } else {
+    ranges.filter(i => {
+      i.at("start", default: none) != none and i.at("end", default: none) != none
+    })
   }
-  let ranges = filtered-ranges
 
   for (event, range) in ranges {
     let day-count = (range.end - range.start).days()
