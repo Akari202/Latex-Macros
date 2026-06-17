@@ -132,25 +132,29 @@
 }
 
 #let fit-monomial(data, max_degree: 5) = {
-  import "@preview/sertyp:0.1.2"
+  import "@preview/sertyp:0.1.4"
   assert(max_degree < calc.pow(2, 7) - 1, message: "Cannot have a degree higher than 127")
-  let fit = cbor(__typ-utils.fit_monomial(
-    sertyp.serialize-cbor(data.map(i => { i.map(float) })),
-    sertyp.serialize-cbor(max_degree),
-  ))
-  (
-    "coefficients": fit.at(0),
-    "equation": $#fit.at(1)$,
-    "degree": fit.at(2),
-    "r-squared": fit.at(3),
-    "fn": x => {
-      let out = 0
-      for i in range(fit.at(2) + 1) {
-        out = out + fit.at(0).at(i) * calc.pow(x, i)
-      }
-      out
-    },
-  )
+  let fit = sertyp.call(__typ-utils.fit_monomial, data.map(i => { i.map(float) }), max_degree)
+  // let fit = __typ-utils.fit_monomial(
+  //   sertyp.serialize-cbor(data.map(i => { i.map(float) })),
+  //   sertyp.serialize-cbor(max_degree),
+  // )
+  [#sertyp.deserialize-cbor(fit).at(0)]
+  // [#{
+  //   (
+  //     "coefficients": fit.at(0),
+  //     "equation": $#fit.at(1)$,
+  //     "degree": fit.at(2),
+  //     "r-squared": fit.at(3),
+  //     "fn": x => {
+  //       let out = 0
+  //       for i in range(fit.at(2) + 1) {
+  //         out = out + fit.at(0).at(i) * calc.pow(x, i)
+  //       }
+  //       out
+  //     },
+  //   )
+  // }]
 }
 
 #let truth-table(statement, caption: "Truth table for the statement") = {

@@ -11,7 +11,8 @@ ciborium = "0.2.2"
 lalrpop-util = "0.23.1"
 polyfit = { version = "0.10.2", default-features = false }
 serde = { version = "1.0.228", features = ["derive"] }
-sertyp = { git = "https://github.com/Akari202/sertyp", version = "0.1.2" }
+# sertyp = { git = "https://github.com/Akari202/sertyp", version = "0.1.2" }
+sertyp = "0.1.4"
 # sertyp = { path = "../sertyp/rust/", version = "0.1.2" }
 wasm-minimal-protocol = "0.1.0"
 

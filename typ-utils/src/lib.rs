@@ -1,4 +1,3 @@
-#![feature(iterator_try_collect, never_type)]
 use std::collections::{HashMap, HashSet};
 use std::error::Error;
 
@@ -7,7 +6,7 @@ use lalrpop_util::lalrpop_mod;
 use polyfit::MonomialFit;
 use polyfit::score::Aic;
 use serde::Serialize;
-use sertyp::{Float, Integer, TypedArray, typst_func};
+use sertyp::{Bytes, Float, Integer, Pair, TypedArray, typst_func};
 use wasm_minimal_protocol::*;
 
 mod logic;
@@ -22,14 +21,32 @@ pub struct TableData {
     pub rows: Vec<Vec<bool>>
 }
 
+// sertyp::auto_impl_dict! {
+//     #[derive(Debug, Clone, Default)]
+//     pub struct MonomialData<'a> {
+//         pub coefficients: TypedArray<Float>,
+//         pub equation: sertyp::String<'a>,
+//         pub degree: Integer,
+//         pub r_squared: Float
+//     }
+// }
+
 #[typst_func]
-pub fn fit_monomial(data: TypedArray<TypedArray<Float>>, degree: Integer) -> Vec<u8> {
-    let degree: usize = degree.try_into().unwrap();
+pub fn fit_monomial<'a>(data: TypedArray<TypedArray<Float>>, degree: Integer) -> Bytes<'a> {
+    let degree: usize = usize::try_from(degree).unwrap_or_default();
     let data: Vec<(f64, f64)> = data
         .into_iter()
         .map(|i| (i[0].clone().into(), i[1].clone().into()))
+        // .map(|i| (i[0].clone().unwrap_f_64(), i[1].clone().unwrap_f_64()))
         .collect();
     let fit = MonomialFit::new_auto(&data, degree, &Aic).unwrap();
+
+    // MonomialData {
+    //     coefficients: TypedArray(fit.coefficients().iter().map(|i| Float::from(*i)).collect()),
+    //     equation: fit.equation().into(),
+    //     degree: fit.degree().into(),
+    //     r_squared: fit.r_squared(None).into()
+    // }
     let mut out = Vec::new();
     into_writer(
         &(
@@ -41,7 +58,7 @@ pub fn fit_monomial(data: TypedArray<TypedArray<Float>>, degree: Integer) -> Vec
         &mut out
     )
     .unwrap();
-    out
+    out.into()
 }
 
 #[cfg_attr(not(test), wasm_func)]
