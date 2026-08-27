@@ -378,3 +378,13 @@
 
   return result
 }
+
+#let get-now() = {
+  let now-str = if "now" in sys.inputs {
+    sys.inputs.now
+  } else {
+    datetime.today().display("[year] [month] [day]") + " 00 00 00"
+  }
+  let (year, month, day, hour, minute, second) = now-str.split(" ").map(int)
+  datetime(year: year, month: month, day: day, hour: hour, minute: minute, second: second)
+}
