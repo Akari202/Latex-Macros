@@ -2,7 +2,11 @@
 #import "../util.typ": merge-dictionaries
 
 #let fixed-holidays = (
-  January: ("01": "New Year's day", "27": "Holocaust Remembrance Day", "30": "Fred Korematsu day"),
+  January: (
+    "01": "New Year's day",
+    "27": "Holocaust Remembrance Day",
+    "30": "Fred Korematsu day",
+  ),
   February: ("14": "Velentine's day", "19": "Day of Remembrance"),
   March: (
     "14": (
@@ -58,36 +62,79 @@
   let first-weekday-of-month = int(
     datetime(year: year, month: month, day: 1).display("[weekday repr:monday]"),
   )
-  1 + calc.rem(weekday-to-int(weekday) - first-weekday-of-month + 7, 7) + (n - 1) * 7
+  (
+    1 + calc.rem(weekday-to-int(weekday) - first-weekday-of-month + 7, 7) + (n - 1) * 7
+  )
 }
 
 #let nth-to-last-weekday-of-month(year, month, n, weekday) = {
   let day-count = get-month-day-count(year, month)
   let last-weekday-of-month = int(
-    datetime(year: year, month: month, day: day-count).display("[weekday repr:monday]"),
+    datetime(year: year, month: month, day: day-count).display(
+      "[weekday repr:monday]",
+    ),
   )
-  day-count - calc.rem(last-weekday-of-month - weekday-to-int(weekday) + 7, 7) - (n - 1) * 7
+  (
+    day-count - calc.rem(last-weekday-of-month - weekday-to-int(weekday) + 7, 7) - (n - 1) * 7
+  )
 }
 
 #let nth-to-last-weekday-before(year, month, n, weekday, last-day) = {
   let last-weekday = int(
-    datetime(year: year, month: month, day: last-day).display("[weekday repr:monday]"),
+    datetime(year: year, month: month, day: last-day).display(
+      "[weekday repr:monday]",
+    ),
   )
-  last-day - calc.rem(last-weekday - weekday-to-int(weekday) + 7, 7) - (n - 1) * 7
+  (
+    last-day - calc.rem(last-weekday - weekday-to-int(weekday) + 7, 7) - (n - 1) * 7
+  )
 }
 
 #let moving-holidays(year) = {
   (
-    January: (pad-str(nth-weekday-of-month(year, 1, 3, "Monday")): "Martin Luther King Jr. day"),
-    February: (pad-str(nth-weekday-of-month(year, 2, 3, "Monday")): "Presidents day"),
-    March: (pad-str(nth-weekday-of-month(year, 3, 2, "Sunday")): "Daylight savings time starts"),
+    January: (
+      pad-str(nth-weekday-of-month(
+        year,
+        1,
+        3,
+        "Monday",
+      )): "Martin Luther King Jr. day",
+    ),
+    February: (
+      pad-str(nth-weekday-of-month(year, 2, 3, "Monday")): "Presidents day",
+    ),
+    March: (
+      pad-str(nth-weekday-of-month(
+        year,
+        3,
+        2,
+        "Sunday",
+      )): "Daylight savings time starts",
+    ),
     May: merge-dictionaries(
       (pad-str(nth-weekday-of-month(year, 5, 2, "Sunday")): "Mother's day"),
-      (pad-str(nth-to-last-weekday-of-month(year, 5, 1, "Monday")): "Memorial day"),
-      (pad-str(nth-to-last-weekday-before(year, 5, 1, "Monday", 24)): "Victoria day"),
+      (
+        pad-str(nth-to-last-weekday-of-month(
+          year,
+          5,
+          1,
+          "Monday",
+        )): "Memorial day",
+      ),
+      (
+        pad-str(nth-to-last-weekday-before(
+          year,
+          5,
+          1,
+          "Monday",
+          24,
+        )): "Victoria day",
+      ),
     ),
     June: (pad-str(nth-weekday-of-month(year, 6, 3, "Sunday")): "Father's day"),
-    September: (pad-str(nth-weekday-of-month(year, 9, 1, "Monday")): "Labor day"),
+    September: (
+      pad-str(nth-weekday-of-month(year, 9, 1, "Monday")): "Labor day",
+    ),
     October: (
       pad-str(nth-weekday-of-month(year, 10, 2, "Monday")): (
         "Canadian Thanksgiving",
@@ -96,11 +143,26 @@
       ),
     ),
     November: merge-dictionaries(
-      (pad-str(nth-weekday-of-month(year, 11, 1, "Sunday")): "Daylight savings time ends"),
+      (
+        pad-str(nth-weekday-of-month(
+          year,
+          11,
+          1,
+          "Sunday",
+        )): "Daylight savings time ends",
+      ),
       (pad-str(nth-weekday-of-month(year, 11, 4, "Thursday")): "Thanksgiving"),
-      (pad-str(nth-weekday-of-month(year, 11, 4, "Thursday") + 1): "Black Friday"),
+      (
+        pad-str(
+          nth-weekday-of-month(year, 11, 4, "Thursday") + 1,
+        ): "Black Friday",
+      ),
       if calc.rem(year, 2) == 0 {
-        (pad-str(nth-weekday-of-month(year, 11, 1, "Monday") + 1): "Election day")
+        (
+          pad-str(
+            nth-weekday-of-month(year, 11, 1, "Monday") + 1,
+          ): "Election day",
+        )
       } else {
         (:)
       },

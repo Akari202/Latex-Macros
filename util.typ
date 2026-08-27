@@ -135,7 +135,10 @@
 
 #let fit-monomial(data, max_degree: 5) = {
   import "@preview/sertyp:0.1.2"
-  assert(max_degree < calc.pow(2, 7) - 1, message: "Cannot have a degree higher than 127")
+  assert(
+    max_degree < calc.pow(2, 7) - 1,
+    message: "Cannot have a degree higher than 127",
+  )
   let fit = cbor(__typ-utils.fit_monomial(
     sertyp.serialize-cbor(data.map(i => { i.map(float) })),
     sertyp.serialize-cbor(max_degree),
@@ -211,7 +214,14 @@
 // NOTE:
 // Currently rows and columns must have enough markers for the size of the table
 #let latex-style(cols: "", rows: "", weight: 0.5pt, padding: 1em) = {
-  let alignment-markers = (l: left, r: right, c: center, t: top, b: bottom, h: horizon)
+  let alignment-markers = (
+    l: left,
+    r: right,
+    c: center,
+    t: top,
+    b: bottom,
+    h: horizon,
+  )
   let alignment-keys = alignment-markers.keys()
 
   let nibble(input, rev: false) = {
@@ -337,7 +347,11 @@
       columns: columns,
       inset: 1.5em,
       align: left + horizon,
-      raw(lang: "typst", block: true, body), eval(body, mode: "markup", scope: scope),
+      raw(lang: "typst", block: true, body), eval(
+        body,
+        mode: "markup",
+        scope: scope,
+      ),
     ),
   )
 }
@@ -360,7 +374,11 @@
         if j in result {
           let old = result.at(j)
           if type(old) == dictionary and type(k) == dictionary {
-            result.insert(j, merge-dictionaries(old, k, always-make-array: always-make-array))
+            result.insert(j, merge-dictionaries(
+              old,
+              k,
+              always-make-array: always-make-array,
+            ))
           } else {
             let new-value = if type(old) == type(k) and not always-make-array {
               old + k
@@ -386,5 +404,12 @@
     datetime.today().display("[year] [month] [day]") + " 00 00 00"
   }
   let (year, month, day, hour, minute, second) = now-str.split(" ").map(int)
-  datetime(year: year, month: month, day: day, hour: hour, minute: minute, second: second)
+  datetime(
+    year: year,
+    month: month,
+    day: day,
+    hour: hour,
+    minute: minute,
+    second: second,
+  )
 }

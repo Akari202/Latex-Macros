@@ -8,7 +8,11 @@
   for (year, months) in events {
     for (month, days) in months {
       for (day, content) in days {
-        let date = datetime(year: int(year), month: month-to-int(month), day: int(day))
+        let date = datetime(
+          year: int(year),
+          month: month-to-int(month),
+          day: int(day),
+        )
         let items = if type(content) == array { content } else { (content,) }
         let filtered_items = ()
         for item in items {
@@ -30,14 +34,18 @@
   let ranges = if sys.version < version(0, 15, 0) {
     let filtered-ranges = (:)
     for (event, range) in ranges {
-      if range.at("start", default: none) != none and range.at("end", default: none) != none {
+      if (
+        range.at("start", default: none) != none and range.at("end", default: none) != none
+      ) {
         filtered-ranges.insert(event, range)
       }
     }
     filtered-ranges
   } else {
     ranges.filter(i => {
-      i.at("start", default: none) != none and i.at("end", default: none) != none
+      (
+        i.at("start", default: none) != none and i.at("end", default: none) != none
+      )
     })
   }
 
@@ -73,7 +81,9 @@
   duration-hints: true,
 ) = {
   let start = parse-date(start)
-  let end = if type(end) == int { add-months-to-date(start, end - 1) } else { parse-date(end) }
+  let end = if type(end) == int { add-months-to-date(start, end - 1) } else {
+    parse-date(end)
+  }
 
   let month-count = months-between(start, end)
   let year-count = years-between(start, end)

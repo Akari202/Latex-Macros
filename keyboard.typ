@@ -91,8 +91,12 @@
           let keycode = keymap.at(index)
           key(
             width: width,
-            paint: if diff != none and diff.at(index) != keycode { red } else { style.paint },
-            if mark-home and (index == 36 or index == 33) { underline(keycode) } else { keycode },
+            paint: if diff != none and diff.at(index) != keycode { red } else {
+              style.paint
+            },
+            if mark-home and (index == 36 or index == 33) {
+              underline(keycode)
+            } else { keycode },
           )
           x-position += width
         }

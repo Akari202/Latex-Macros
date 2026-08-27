@@ -50,7 +50,10 @@
     let value = calc.round(value * calc.pow(10, offset), digits: digits)
     [#value#unit-spacing#unit]
   } else {
-    let value = calc.round(value * calc.pow(10, offset - prefix-exponent), digits: digits)
+    let value = calc.round(
+      value * calc.pow(10, offset - prefix-exponent),
+      digits: digits,
+    )
     [#value#unit-spacing#prefix.prefix#unit]
   }
 }

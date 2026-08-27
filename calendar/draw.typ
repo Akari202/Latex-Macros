@@ -76,10 +76,20 @@
   }
 }
 
-#let month-calendar(date, events: (:), highlight-today: true, duration-hints: true) = {
+#let month-calendar(
+  date,
+  events: (:),
+  highlight-today: true,
+  duration-hints: true,
+) = {
   let day-count = get-month-day-count(date.year, date.month)
   let empty-leading-days = (
-    int(datetime(year: date.year, month: date.month, day: 1).display("[weekday repr:monday]")) - 1
+    int(
+      datetime(year: date.year, month: date.month, day: 1).display(
+        "[weekday repr:monday]",
+      ),
+    )
+      - 1
   )
   let today = datetime.today()
   let highlight-today = (
@@ -151,7 +161,9 @@
                 text(size: 0.7em, display-event(
                   j,
                   is-monday: duration-hints
-                    and (calc.rem(i + empty-leading-days - 1, 7) == 0 or i == 1),
+                    and (
+                      calc.rem(i + empty-leading-days - 1, 7) == 0 or i == 1
+                    ),
                 ))
               },
             )

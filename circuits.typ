@@ -102,11 +102,15 @@
       let (ix, iy) = coord.split(",").map(int)
       let (x, y) = (ix * drawing-scale, iy * drawing-scale)
       if debug {
-        rect((x - half-length, y - half-length), (x + half-length, y + half-length), stroke: (
-          thickness: 1pt,
-          dash: "loosely-dotted",
-          paint: gray,
-        ))
+        rect(
+          (x - half-length, y - half-length),
+          (x + half-length, y + half-length),
+          stroke: (
+            thickness: 1pt,
+            dash: "loosely-dotted",
+            paint: gray,
+          ),
+        )
       }
       if char == "o" {
         let radius = 0.1 * drawing-scale
@@ -174,16 +178,36 @@
         let radius = 0.13 * drawing-scale
         line((x - half-length, y), (start-x, y))
         arc((start-x, y), start: 180deg, stop: 0deg, radius: radius)
-        arc((start-x + 0.26 * drawing-scale, y), start: 180deg, stop: 0deg, radius: radius)
-        arc((start-x + 0.52 * drawing-scale, y), start: 180deg, stop: 0deg, radius: radius)
+        arc(
+          (start-x + 0.26 * drawing-scale, y),
+          start: 180deg,
+          stop: 0deg,
+          radius: radius,
+        )
+        arc(
+          (start-x + 0.52 * drawing-scale, y),
+          start: 180deg,
+          stop: 0deg,
+          radius: radius,
+        )
         line((start-x + 0.78 * drawing-scale, y), (x + half-length, y))
       } else if char == "H" {
         let start-y = y + 0.4 * drawing-scale
         let radius = 0.13 * drawing-scale
         line((x, y + half-length), (x, start-y))
         arc((x, start-y), start: 90deg, stop: -90deg, radius: radius)
-        arc((x, start-y - 0.26 * drawing-scale), start: 90deg, stop: -90deg, radius: radius)
-        arc((x, start-y - 0.52 * drawing-scale), start: 90deg, stop: -90deg, radius: radius)
+        arc(
+          (x, start-y - 0.26 * drawing-scale),
+          start: 90deg,
+          stop: -90deg,
+          radius: radius,
+        )
+        arc(
+          (x, start-y - 0.52 * drawing-scale),
+          start: 90deg,
+          stop: -90deg,
+          radius: radius,
+        )
         line((x, start-y - 0.78 * drawing-scale), (x, y - half-length))
       } else if char == "s" {
         let radius = 0.05 * drawing-scale
@@ -191,7 +215,10 @@
         line((x - half-length, y), (x - 0.3 * drawing-scale, y))
         circle((x - 0.25 * drawing-scale, y), radius: radius)
         line(
-          (x - 0.25 * drawing-scale + calc.cos(angle) * radius, y + calc.sin(angle) * radius),
+          (
+            x - 0.25 * drawing-scale + calc.cos(angle) * radius,
+            y + calc.sin(angle) * radius,
+          ),
           (
             x - 0.25 * drawing-scale + calc.cos(angle) * 0.5 * drawing-scale,
             y + calc.sin(angle) * 0.5 * drawing-scale,
@@ -205,7 +232,10 @@
         line((x, y - half-length), (x, y - 0.3 * drawing-scale))
         circle((x, y - 0.25 * drawing-scale), radius: radius)
         line(
-          (x + calc.sin(angle) * radius, y - 0.25 * drawing-scale + calc.cos(angle) * radius),
+          (
+            x + calc.sin(angle) * radius,
+            y - 0.25 * drawing-scale + calc.cos(angle) * radius,
+          ),
           (
             x + calc.sin(angle) * 0.5 * drawing-scale,
             y - 0.25 * drawing-scale + calc.cos(angle) * 0.5 * drawing-scale,
@@ -219,7 +249,10 @@
         line((x + half-length, y), (x + 0.3 * drawing-scale, y))
         circle((x + 0.25 * drawing-scale, y), radius: radius)
         line(
-          (x + 0.25 * drawing-scale - calc.cos(angle) * radius, y + calc.sin(angle) * radius),
+          (
+            x + 0.25 * drawing-scale - calc.cos(angle) * radius,
+            y + calc.sin(angle) * radius,
+          ),
           (
             x + 0.25 * drawing-scale - calc.cos(angle) * 0.5 * drawing-scale,
             y + calc.sin(angle) * 0.5 * drawing-scale,
@@ -235,7 +268,10 @@
         line((x, y + half-length), (x, y + 0.3 * drawing-scale))
         circle((x, y + 0.25 * drawing-scale), radius: radius)
         line(
-          (x + calc.sin(angle) * radius, y + 0.25 * drawing-scale - calc.cos(angle) * radius),
+          (
+            x + calc.sin(angle) * radius,
+            y + 0.25 * drawing-scale - calc.cos(angle) * radius,
+          ),
           (
             x + calc.sin(angle) * 0.5 * drawing-scale,
             y + 0.25 * drawing-scale - calc.cos(angle) * 0.5 * drawing-scale,
@@ -251,7 +287,10 @@
         line((x - half-length, y), (x - 0.3 * drawing-scale, y))
         circle((x - 0.25 * drawing-scale, y), radius: radius)
         line(
-          (x - 0.25 * drawing-scale + calc.cos(angle) * radius, y + calc.sin(angle) * radius),
+          (
+            x - 0.25 * drawing-scale + calc.cos(angle) * radius,
+            y + calc.sin(angle) * radius,
+          ),
           (
             x - 0.25 * drawing-scale + calc.cos(angle) * 0.5 * drawing-scale,
             y + calc.sin(angle) * 0.5 * drawing-scale,
@@ -267,7 +306,10 @@
         line((x, y - half-length), (x, y - 0.3 * drawing-scale))
         circle((x, y - 0.25 * drawing-scale), radius: radius)
         line(
-          (x + calc.sin(angle) * radius, y - 0.25 * drawing-scale + calc.cos(angle) * radius),
+          (
+            x + calc.sin(angle) * radius,
+            y - 0.25 * drawing-scale + calc.cos(angle) * radius,
+          ),
           (
             x + calc.sin(angle) * 0.5 * drawing-scale,
             y - 0.25 * drawing-scale + calc.cos(angle) * 0.5 * drawing-scale,
@@ -309,13 +351,19 @@
         line((x, y - 0.4 * drawing-scale), (x, y - half-length))
       } else if char == "&" {
         arc(
-          (x + calc.sin(45deg) * half-length, y - calc.cos(45deg) * half-length),
+          (
+            x + calc.sin(45deg) * half-length,
+            y - calc.cos(45deg) * half-length,
+          ),
           radius: half-length,
           start: -45deg,
           delta: 245deg,
         )
         mark(
-          (x - calc.sin(45deg) * half-length, y - calc.cos(45deg) * half-length),
+          (
+            x - calc.sin(45deg) * half-length,
+            y - calc.cos(45deg) * half-length,
+          ),
           -58deg,
           symbol: "stealth",
           stroke: 1pt,

@@ -71,7 +71,9 @@
     below: 1.7em,
   )
 
-  show math.equation: it => if compile-host == "didactic" and sys.version < version(0, 15, 0) {
+  show math.equation: it => if (
+    compile-host == "didactic" and sys.version < version(0, 15, 0)
+  ) {
     if it.block {
       html.frame(it)
     } else {

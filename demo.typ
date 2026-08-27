@@ -72,7 +72,11 @@ $#value #rankine = #temperature(value, \"R\", want: \"C\")$",
   caption: "units and constants",
 )
 
-#typst-example("#oeis(\"A000796\")", scope: (oeis: oeis), caption: "OEIS linking")
+#typst-example(
+  "#oeis(\"A000796\")",
+  scope: (oeis: oeis),
+  caption: "OEIS linking",
+)
 
 #typst-example(
   "#let data = ((4, 2.0), (3, 4.5), (1, 4), (-2, 7),)
@@ -159,7 +163,13 @@ $#value #rankine = #temperature(value, \"R\", want: \"C\")$",
     $ boxed(f(t) = e^(-t) cos(3 t) - (e^(-t) sin(3 t)) / (3)) $
   ]
 ]",
-  scope: (problem: problem, hint: hint, solution: solution, ilaplace: ilaplace, boxed: boxed),
+  scope: (
+    problem: problem,
+    hint: hint,
+    solution: solution,
+    ilaplace: ilaplace,
+    boxed: boxed,
+  ),
   caption: "homework problems",
 )
 
