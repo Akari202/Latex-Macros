@@ -6,3 +6,7 @@
 #let show-color = sys.inputs.at("color", default: "false") == "true"
 #let author = "Akari Harada"
 #let __typ-utils = plugin("./typ-utils/typ_utils.wasm")
+
+#let output-is-html() = {
+  compile-host == "didactic" or sys.inputs.at("target", default: "paged") == "html"
+}

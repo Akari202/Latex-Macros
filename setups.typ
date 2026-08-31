@@ -1,4 +1,4 @@
-#import "config.typ": author, compile-host
+#import "config.typ": author, output-is-html
 
 #let debug(body) = {
   set block(stroke: green + 0.2pt)
@@ -8,6 +8,59 @@
     text(fill: orange, it.body)
   }
   body
+}
+
+#let html-compat(body) = {
+  context if output-is-html() {
+    show line.where(length: 100%): it => html.hr()
+
+    show math.equation: it => {
+      if sys.version < version(0, 15, 0) {
+        if it.block {
+          html.frame(it)
+        } else {
+          box(html.frame(it))
+        }
+      } else {
+        it
+      }
+    }
+
+
+    show align: it => html.elem("div", attrs: (style: "text-align: center;"), it.body)
+
+    show image: it => {
+      let width = if type(it.width) == relative {
+        let length = it.width.length.to-absolute()
+        if length == 0pt {
+          (width: str(it.width.ratio / 1%) + "%")
+        } else {
+          (width: str((length * it.width.ratio).pt()) + "px")
+        }
+      } else {
+        (:)
+      }
+      let alt-title = if it.alt != none {
+        (alt: it.alt, title: it.alt)
+      } else {
+        (:)
+      }
+      html.elem(
+        "img",
+        attrs: (
+          src: it.source,
+        )
+          + width
+          + alt-title,
+      )
+    }
+
+    show pagebreak: it => []
+
+    body
+  } else {
+    body
+  }
 }
 
 #let minimal-setup(
@@ -22,6 +75,8 @@
   description: none,
   body,
 ) = {
+  show: html-compat
+
   set document(
     title: title,
     description: description,
@@ -71,73 +126,10 @@
     below: 1.7em,
   )
 
-  show math.equation: it => if (
-    compile-host == "didactic" and sys.version < version(0, 15, 0)
-  ) {
-    if it.block {
-      html.frame(it)
-    } else {
-      box(html.frame(it))
-    }
-  } else {
-    it
-  }
-
-  show line.where(length: 100%): it => if compile-host == "didactic" {
-    html.elem("hr")
-  } else {
-    it
-  }
-
-  show align: it => if compile-host == "didactic" {
-    html.elem("div", attrs: (style: "text-align: center;"), it.body)
-  } else {
-    it
-  }
-
-  show image: it => if compile-host == "didactic" {
-    let width = if type(it.width) == relative {
-      let length = it.width.length.to-absolute()
-      if length == 0pt {
-        (width: str(it.width.ratio / 1%) + "%")
-      } else {
-        (width: str((length * it.width.ratio).pt()) + "px")
-      }
-    } else {
-      (:)
-    }
-    let alt-title = if it.alt != none {
-      (alt: it.alt, title: it.alt)
-    } else {
-      (:)
-    }
-
-    html.elem(
-      "img",
-      attrs: (
-        src: it.source,
-      )
-        + width
-        + alt-title,
-    )
-  } else {
-    it
-  }
-
   set figure(placement: placement)
-
-  show raw.where(block: false): box.with(
-    fill: gray.lighten(80%),
-    // inset: (x: 3pt, y: 0pt),
-    inset: (x: 3pt, y: 1pt),
-    // inset: (x: 5pt, y: 3pt),
-    outset: (y: 3pt),
-    radius: 2pt,
-  )
-
   show figure.where(kind: raw): set block(breakable: true)
-  show raw.where(block: true): set par(leading: 1em)
 
+  show raw.where(block: true): set par(leading: 1em)
   show raw.where(block: true): set block(
     fill: gray.lighten(90%),
     stroke: gray,
@@ -148,14 +140,18 @@
     breakable: true,
   )
 
+  show raw.where(block: false): box.with(
+    fill: gray.lighten(80%),
+    // inset: (x: 3pt, y: 0pt),
+    inset: (x: 3pt, y: 1pt),
+    // inset: (x: 5pt, y: 3pt),
+    outset: (y: 3pt),
+    radius: 2pt,
+  )
+
   set pagebreak(
     weak: true,
   )
-  show pagebreak: it => if compile-host == "didactic" {
-    []
-  } else {
-    it
-  }
 
   set bibliography(
     style: "american-society-of-mechanical-engineers",

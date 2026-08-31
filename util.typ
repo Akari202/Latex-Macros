@@ -1,4 +1,4 @@
-#import "config.typ": __typ-utils, compile-host, show-solutions
+#import "config.typ": __typ-utils, show-solutions, output-is-html
 
 #let problem(body) = {
   counter("problem").step()
@@ -63,7 +63,7 @@
 }
 
 #let todo = {
-  if compile-host == "didactic" {
+  context if output-is-html() {
     html.elem("div", attrs: (style: "color: red;"), "TODO")
   } else {
     // warn("There's still work to do!")
@@ -72,7 +72,7 @@
 }
 
 #let todo-lorem(count) = {
-  if compile-host == "didactic" {
+   context if output-is-html() {
     html.elem("div", attrs: (style: "color: red;"), lorem(count))
   } else {
     // warn("There's still work to do!")
@@ -109,7 +109,7 @@
       size: E.size,
       baseline: E.y_offset,
     )[E]#h(X.x_offset)X]
-  if compile-host == "didactic" {
+  context if output-is-html() {
     box(html.frame(output))
   } else {
     output
@@ -413,3 +413,5 @@
     second: second,
   )
 }
+
+
