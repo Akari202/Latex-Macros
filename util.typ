@@ -1,12 +1,12 @@
 #import "config.typ": __typ-utils, show-solutions, output-is-html
 
-#let problem(body) = {
+#let problem(name: none, body) = {
   counter("problem").step()
   counter("part").update(0)
 
   context {
     let count = counter("problem").display()
-    [= Problem #count #label("problem" + str(count))]
+    [= Problem #count#label("problem" + str(count))#{if name != none  [: #name]}]
   }
   body
 }
@@ -414,4 +414,11 @@
   )
 }
 
+#let display-bool(value) = {
+    if value {
+        [True]
+    } else {
+        [False]
+    }
+}
 

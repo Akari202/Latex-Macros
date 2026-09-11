@@ -26,7 +26,6 @@
       }
     }
 
-
     show align: it => html.elem("div", attrs: (style: "text-align: center;"), it.body)
 
     show image: it => {
@@ -57,6 +56,13 @@
 
     show pagebreak: it => []
 
+    //    show figure: it => {
+    //      html.frame(it.body)
+    //      if it.has("caption") and it.caption != none {
+    //          html.elem("figcaption", it.caption.body)
+    //      }
+    //    }
+
     body
   } else {
     body
@@ -73,6 +79,7 @@
   slides: false,
   date: auto,
   description: none,
+  ai-statment: none,
   body,
 ) = {
   show: html-compat
@@ -164,7 +171,16 @@
   body
 
   if bib {
+    if ai-statment != none {
+      [= Generative AI Statement]
+      ai-statment
+    }
     bibliography("refs.bib")
+  } else {
+    if ai-statment != none {
+      [= Genderative AI Statement]
+      ai-statment
+    }
   }
 }
 
@@ -179,6 +195,7 @@
   numbering: (equation: false, section: false),
   show-title: false,
   date: auto,
+  ai-statment: none,
   body,
 ) = {
   show: minimal-setup.with(
@@ -188,6 +205,7 @@
     numbering: numbering,
     description: description,
     date: date,
+    ai-statment: ai-statment,
   )
 
   let fit-to-width(body) = context {
@@ -339,6 +357,7 @@
   equation-numbering: false,
   bib: false,
   placement: none,
+  ai-statment: none,
   body,
 ) = {
   show: setup.with(
@@ -348,6 +367,7 @@
     bib: bib,
     placement: placement,
     description: [#course-number #course #homework-title],
+    ai-statment: ai-statment,
   )
 
   align(center + horizon)[
