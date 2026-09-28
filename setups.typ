@@ -1,4 +1,4 @@
-#import "config.typ": author, output-is-html
+#import "config.typ": author, output-is-html, show-solutions, show-grades
 
 #let debug(body) = {
   set block(stroke: green + 0.2pt)
@@ -188,6 +188,7 @@
   title: none,
   header-center: [],
   bib: false,
+  margin: (x: 1in, y: 1in),
   placement: none,
   footer-right: [],
   continuing-messages: true,
@@ -201,6 +202,7 @@
   show: minimal-setup.with(
     title: title,
     bib: bib,
+    margin: margin,
     placement: placement,
     numbering: numbering,
     description: description,
@@ -358,6 +360,8 @@
   bib: false,
   placement: none,
   ai-statment: none,
+  grade: none,
+  grade-feedback: none,
   body,
 ) = {
   show: setup.with(
@@ -371,7 +375,21 @@
   )
 
   align(center + horizon)[
-    #v(1in)
+    #context if grade != none and show-grades {
+      v(0.2in)
+      place(
+        right,
+        rotate(5deg, align(right)[
+            #text(fill: red, weight: "bold", size: 2em)[#grade]
+            #if grade-feedback != none [
+              #text(fill: red, size: 0.9em, style: "italic")[\ #grade-feedback]
+            ]
+          ])
+      )
+      v(0.8in)
+    } else {
+    v(1in)
+    }
     #title() \
     #v(0.1in)
     Due on #due-date \

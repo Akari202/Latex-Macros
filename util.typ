@@ -1,4 +1,4 @@
-#import "config.typ": __typ-utils, show-solutions, output-is-html
+#import "config.typ": __typ-utils, show-solutions, output-is-html, show-grades
 
 #let problem(name: none, body) = {
   counter("problem").step()
@@ -45,6 +45,17 @@
       #emph[#strong[Hint:] #body]
     ]
   ]
+}
+
+#let graded(score, feedback: none) = {
+  if show-grades {
+  v(-1.5em)
+  pad(x: 2em, top: 0.5em, bottom: 0.5em)[
+    #text(size: 0.85em, fill: red)[
+      #emph[#strong[Grade: #score] #feedback]
+    ]
+  ]
+  }
 }
 
 #let example(body) = {
