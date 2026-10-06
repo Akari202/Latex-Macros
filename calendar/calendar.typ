@@ -30,24 +30,11 @@
     }
   }
 
-  // TODO: Waiting till this feature gets released. PR: 7284
-  let ranges = if sys.version < version(0, 15, 0) {
-    let filtered-ranges = (:)
-    for (event, range) in ranges {
-      if (
-        range.at("start", default: none) != none and range.at("end", default: none) != none
-      ) {
-        filtered-ranges.insert(event, range)
-      }
-    }
-    filtered-ranges
-  } else {
-    ranges.filter(i => {
+  let ranges = ranges.filter(i => {
       (
         i.at("start", default: none) != none and i.at("end", default: none) != none
       )
     })
-  }
 
   for (event, range) in ranges {
     let day-count = (range.end - range.start).days()
@@ -81,7 +68,9 @@
   duration-hints: true,
 ) = {
   let start = parse-date(start)
-  let end = if type(end) == int { add-months-to-date(start, end - 1) } else {
+  let end = if type(end) == int {
+    add-months-to-date(start, end - 1)
+} else {
     parse-date(end)
   }
 
@@ -115,8 +104,10 @@
     ),
   )
 
-  let date = start
-  while date.year <= end.year and date.month <= end.month {
+  iterate-months(
+    start,
+    end,
+    date => {
     month-calendar(
       date,
       events: all-events
@@ -125,11 +116,6 @@
       highlight-today: highlight-today,
       duration-hints: duration-hints,
     )
-
-    date.month += 1
-    if date.month > 12 {
-      date.month = 1
-      date.year += 1
     }
-  }
+  )
 }

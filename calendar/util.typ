@@ -152,3 +152,19 @@
     input
   }
 }
+
+#let iterate-months(start, end, closure) = {
+  let start-total = start.year * 12 + (start.month - 1)
+  let end-total = end.year * 12 + (end.month - 1)
+
+  if start-total <= end-total {
+    for i in range(start-total, end-total + 1) {
+      let date = (
+        year: calc.trunc(i / 12),
+        month: calc.rem(i, 12) + 1
+      )
+
+      closure(date)
+    }
+  }
+}

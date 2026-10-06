@@ -23,6 +23,7 @@
 #let arcsech = $op(sech^(-1))$
 #let arccsch = $op(csch^(-1))$
 #let arccoth = $op(coth^(-1))$
+#let foralll = $quad forall med$
 
 #let laplace(body) = $op(cal("L"))lr({#body})$
 #let ilaplace(body) = $op(cal("L"))^(-1)lr({#body})$
@@ -31,6 +32,7 @@
 // #let det(body) = $lr(|#body|)$
 #let norm(body) = $lr(||#body||)$
 #let ab(body) = math.bold(math.arrow(body))
+#let bb(body) = math.bold(body)
 #let ddot(body) = math.dot.double(body)
 #let ddb(body) = math.bold(math.dot.double(body))
 #let db(body) = math.bold(math.dot(body))

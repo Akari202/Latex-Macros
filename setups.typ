@@ -1,4 +1,4 @@
-#import "config.typ": author, output-is-html, show-solutions, show-grades
+#import "config.typ": author, output-is-html, show-solutions, show-grades, color-config
 
 #let debug(body) = {
   set block(stroke: green + 0.2pt)
@@ -132,6 +132,7 @@
     above: 1.7em,
     below: 1.7em,
   )
+  set math.mat(delim: "[")
 
   set figure(placement: placement)
   show figure.where(kind: raw): set block(breakable: true)
@@ -236,7 +237,7 @@
     footer-descent: 25%,
     header: context {
       let page-num = here().page()
-      if page-num == 1 { return }
+      if page-num == 1 and query(<titlepage>).len() > 0 { return }
 
       set text(size: 10pt)
       let threshold = 0.40 * page.height
@@ -380,9 +381,9 @@
       place(
         right,
         rotate(5deg, align(right)[
-            #text(fill: red, weight: "bold", size: 2em)[#grade]
+            #text(fill: color-config.grade, weight: "bold", size: 2em)[#grade]
             #if grade-feedback != none [
-              #text(fill: red, size: 0.9em, style: "italic")[\ #grade-feedback]
+              #text(fill: color-config.grade, size: 0.9em, style: "italic")[\ #grade-feedback]
             ]
           ])
       )

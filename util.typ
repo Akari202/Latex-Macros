@@ -1,4 +1,4 @@
-#import "config.typ": __typ-utils, show-solutions, output-is-html, show-grades
+#import "config.typ": __typ-utils, show-solutions, output-is-html, show-grades, color-config
 
 #let problem(name: none, body) = {
   counter("problem").step()
@@ -51,34 +51,56 @@
   if show-grades {
   v(-1.5em)
   pad(x: 2em, top: 0.5em, bottom: 0.5em)[
-    #text(size: 0.85em, fill: red)[
+    #text(size: 0.85em, fill: color-config.grade)[
       #emph[#strong[Grade: #score] #feedback]
     ]
   ]
   }
 }
 
-#let example(body) = {
-  block(
+#let generic-aside(numbering: "1", supplement: "Aside", kind: "aside", title, body) = {
+  figure(
+    kind: kind,
+    supplement: supplement,
+    numbering: numbering,
+    outlined: true,
+   align(left, block(
     width: 100%,
-    stroke: 0.5pt,
+    stroke: 0.5pt + color-config.at(kind),
     inset: 1em,
-    fill: white,
+    fill: color-config.at(kind + "-fill"),
     radius: 2pt,
+    breakable: true,
   )[
     #text(size: 0.85em)[
-      #strong[Example:]\
+      #strong[
+        #supplement#context {
+          if numbering != none {
+            " " + counter(figure.where(kind: kind)).display(numbering)
+        }
+      }:
+        #if title != none {
+        title
+        }
+      ] \
       #body
     ]
   ]
+)
+)
 }
+
+#let example(numbering: "1", title: none, body) = generic-aside(numbering: numbering, supplement: "Example", kind: "example", title, body)
+#let theorem = generic-aside.with(supplement: "Theorem", kind: "theorem")
+#let define = generic-aside.with(supplement: "Definition", kind: "definition")
+#let formula = generic-aside.with(supplement: "Formula", kind: "formula")
 
 #let todo = {
   context if output-is-html() {
     html.elem("div", attrs: (style: "color: red;"), "TODO")
   } else {
     // warn("There's still work to do!")
-    text(red)[TODO]
+    text(color-config.todo)[TODO]
   }
 }
 
@@ -87,7 +109,7 @@
     html.elem("div", attrs: (style: "color: red;"), lorem(count))
   } else {
     // warn("There's still work to do!")
-    text(red, lorem(count))
+    text(color-config.todo, lorem(count))
   }
 }
 

@@ -28,7 +28,7 @@
     $J dot.double(theta) = sum T(t)$ about the centroidal axis of the pulley.
   ]
   #solution[
-    #graded("97%")
+    #graded("97%", feedback: "Points removed arbitrarily")
     By summing the moments $J dot.double(theta) = sum T(t)$ to obtain the equations of motion:
     $ J dot.double(theta) = R u - R m dot.double(y) - R^2 theta k $
     $ J dot.double(theta) = R u - R^2 m dot.double(theta) - R^2 theta k $

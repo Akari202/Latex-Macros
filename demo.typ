@@ -155,6 +155,7 @@ $#value #rankine = #temperature(value, \"R\", want: \"C\")$",
     problem solved in the class.
   ]
   #solution[
+    #graded(\"100%\", feedback: \"Good job!\")
     Using completing the square
     $ F(s) = s / ((s + 1)^2 + 9) $
     $ F(s) = (s + 1 - 1)/ ((s + 1)^2 + 3^2) $
@@ -169,6 +170,7 @@ $#value #rankine = #temperature(value, \"R\", want: \"C\")$",
     solution: solution,
     ilaplace: ilaplace,
     boxed: boxed,
+    graded: graded,
   ),
   caption: "homework problems",
 )
@@ -192,4 +194,13 @@ $#value #rankine = #temperature(value, \"R\", want: \"C\")$",
 )",
   scope: (draw-keyboard: draw-keyboard, colemak-dh: colemak-dh, qwerty: qwerty),
   caption: "keyboard layout with diffing",
+)
+
+#typst-example(
+  "#theorem(\"Pythagorean Theorem\")[
+  In a right-angled triangle with legs $a$ and $b$ and hypotenuse $c$
+  $ a^2 + b^2 = c^2 $
+]",
+  scope: (theorem: theorem),
+  caption: "theorem, example, and definition blocks",
 )
