@@ -161,7 +161,7 @@
     for i in range(start-total, end-total + 1) {
       let date = (
         year: calc.trunc(i / 12),
-        month: calc.rem(i, 12) + 1
+        month: calc.rem(i, 12) + 1,
       )
 
       closure(date)

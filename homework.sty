@@ -26,12 +26,15 @@
 \setlength\parindent{0pt}
 
 \newcommand{\enterProblemHeader}[1]{
-    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
-    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next
+    page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem
+    \arabic{#1} continued on next page\ldots}\nobreak{}
 }
 
 \newcommand{\exitProblemHeader}[1]{
-    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem
+    \arabic{#1} continued on next page\ldots}\nobreak{}
     \stepcounter{#1}
     \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
 }
@@ -44,7 +47,7 @@
 
 \newenvironment{homeworkProblem}[1][-1]{
     \ifnum#1>0
-        \setcounter{homeworkProblemCounter}{#1}
+    \setcounter{homeworkProblemCounter}{#1}
     \fi
     \section{Problem \arabic{homeworkProblemCounter}}
     \setcounter{partCounter}{1}
@@ -66,4 +69,5 @@
     \date{\today}
 }
 
-\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+\renewcommand{\part}[1]{\textbf{\large Part
+\Alpha{partCounter}}\stepcounter{partCounter}\\}

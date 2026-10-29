@@ -7,7 +7,7 @@
   class-time: "Section 1",
   due-date: "Tuesday October 29th, in class",
   grade: [97%],
-  grade-feedback: [Nice formatting!]
+  grade-feedback: [Nice formatting!],
 )
 
 #problem[

@@ -31,10 +31,10 @@
   }
 
   let ranges = ranges.filter(i => {
-      (
-        i.at("start", default: none) != none and i.at("end", default: none) != none
-      )
-    })
+    (
+      i.at("start", default: none) != none and i.at("end", default: none) != none
+    )
+  })
 
   for (event, range) in ranges {
     let day-count = (range.end - range.start).days()
@@ -70,7 +70,7 @@
   let start = parse-date(start)
   let end = if type(end) == int {
     add-months-to-date(start, end - 1)
-} else {
+  } else {
     parse-date(end)
   }
 
@@ -108,14 +108,14 @@
     start,
     end,
     date => {
-    month-calendar(
-      date,
-      events: all-events
-        .at(str(date.year), default: (:))
-        .at(int-to-month(date.month), default: (:)),
-      highlight-today: highlight-today,
-      duration-hints: duration-hints,
-    )
-    }
+      month-calendar(
+        date,
+        events: all-events
+          .at(str(date.year), default: (:))
+          .at(int-to-month(date.month), default: (:)),
+        highlight-today: highlight-today,
+        duration-hints: duration-hints,
+      )
+    },
   )
 }

@@ -21,15 +21,15 @@
 }
 
 #let color-config = (
-    todo: __is-color(red, red),
-    grade: __is-color(red,gray),
-    theorem: __is-color(blue,black),
-    theorem-fill: __is-color(blue.lighten(95%),white),
-    definition: __is-color(red,black),
-    definition-fill: __is-color(red.lighten(95%),white),
-    example: __is-color(green,black),
-    example-fill: __is-color(green.lighten(95%),white),
-    formula: __is-color(orange,black),
-    formula-fill: __is-color(orange.lighten(95%),white),
+  todo: __is-color(red, red),
+  grade: __is-color(red, gray),
+  theorem: __is-color(blue, black),
+  theorem-fill: __is-color(blue.lighten(95%), white),
+  definition: __is-color(red, black),
+  definition-fill: __is-color(red.lighten(95%), white),
+  example: __is-color(green, black),
+  example-fill: __is-color(green.lighten(95%), white),
+  formula: __is-color(orange, black),
+  formula-fill: __is-color(orange.lighten(95%), white),
 )
 
