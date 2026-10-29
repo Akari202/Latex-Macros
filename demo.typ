@@ -4,6 +4,10 @@
 #import units: Mohm, degC, degF, degK, degR, kohm, mpss, ohm, prefix, rankine, volts
 #import constants: g
 #import cooking: format-ammount
+#import parser: (
+  augment, cfg, draw-parse-tree, eliminate-left-recursion, generate-slr-table, parse-input,
+  show-lr-table, show-parse-trace,
+)
 #import keyboard: *
 #show: minimal-setup.with(
   title: "Demo",
@@ -200,7 +204,76 @@ $#value #rankine = #temperature(value, \"R\", want: \"C\")$",
   "#theorem(\"Pythagorean Theorem\")[
   In a right-angled triangle with legs $a$ and $b$ and hypotenuse $c$
   $ a^2 + b^2 = c^2 $
-]",
+]<pythagorean>",
   scope: (theorem: theorem),
-  caption: "theorem, example, and definition blocks",
+  caption: "labelable theorem, example, and definition blocks",
 )
+
+#typst-example(
+  "#let grammar = (
+  S: ((\"A\", \"a\"), (\"b\",)),
+  A: ((\"A\", \"c\"), (\"S\", \"d\"), ()),
+)
+#grid(
+  columns: 3,
+  inset: 1em,
+  [*Grammar*],
+  [*No left recursion*], 
+  [*Augmented*],
+  cfg(grammar), 
+  cfg(eliminate-left-recursion(grammar)), 
+  cfg(augment(grammar)),
+)",
+  scope: (cfg: cfg, eliminate-left-recursion: eliminate-left-recursion, augment: augment),
+  caption: "eliminate left recursion, display, and augment context free grammars",
+)
+
+#typst-example(
+  "#let grammar = (
+  S: ((\"C\", \"C\"),),
+  C: ((\"c\", \"C\"), (\"d\",)),
+)
+#let (action-table, goto-table) = generate-slr-table(\"S'\", augment(grammar))
+#show-lr-table(action-table, goto-table)",
+  scope: (generate-slr-table: generate-slr-table, show-lr-table: show-lr-table, augment: augment),
+  caption: "generate and display slr parse tables",
+)
+
+#typst-example(
+  "#let input = (\"(\", \"id\", \"+\", \"id\", \")\", \"*\", \"id\")
+#let grammar = (
+  E: ((\"E\", \"+\", \"T\"), (\"T\",)),
+  T: ((\"T\", \"*\", \"F\"), (\"F\",)),
+  F: ((\"(\", \"E\", \")\"), (\"id\",)),
+)
+#let (action-table, goto-table) = generate-slr-table(\"E'\", augment(grammar))
+#let parse-trace = parse-input(input, action-table, goto-table)
+#draw-parse-tree(parse-trace.output.last().at(0), scale-factor: 75%)",
+  scope: (
+    generate-slr-table: generate-slr-table,
+    parse-input: parse-input,
+    draw-parse-tree: draw-parse-tree,
+    augment: augment,
+  ),
+  caption: "generate and display parse trees from a grammar on a list of tokens",
+)
+
+#typst-example(
+  "#let input = (\"id\", \"*\", \"id\", \"+\", \"id\")
+#let grammar = (
+  E: ((\"E\", \"+\", \"T\"), (\"T\",)),
+  T: ((\"T\", \"*\", \"F\"), (\"F\",)),
+  F: ((\"(\", \"E\", \")\"), (\"id\",)),
+)
+#let (action-table, goto-table) = generate-slr-table(\"E'\", augment(grammar))
+#let parse-trace = parse-input(input, action-table, goto-table)
+#show-parse-trace(parse-trace)",
+  scope: (
+    generate-slr-table: generate-slr-table,
+    parse-input: parse-input,
+    show-parse-trace: show-parse-trace,
+    augment: augment,
+  ),
+  caption: "display a parse trace of an lr parser",
+)
+

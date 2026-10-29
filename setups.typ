@@ -1,4 +1,5 @@
-#import "config.typ": author, output-is-html, show-solutions, show-grades, color-config
+#import "config.typ": author, color-config, output-is-html, show-grades, show-solutions
+#import "util.typ": get-now
 
 #let debug(body) = {
   set block(stroke: green + 0.2pt)
@@ -79,7 +80,7 @@
   slides: false,
   date: auto,
   description: none,
-  ai-statment: none,
+  ai-statement: none,
   body,
 ) = {
   show: html-compat
@@ -103,10 +104,11 @@
   )
 
   set par(
-    linebreaks: "optimized",
     leading: 1.5em,
+    spacing: 2em,
     justify: true,
     first-line-indent: 0pt,
+    linebreaks: "optimized",
   )
 
   show heading: set block(
@@ -172,15 +174,15 @@
   body
 
   if bib {
-    if ai-statment != none {
+    if ai-statement != none {
       [= Generative AI Statement]
-      ai-statment
+      ai-statement
     }
     bibliography("refs.bib")
   } else {
-    if ai-statment != none {
+    if ai-statement != none {
       [= Genderative AI Statement]
-      ai-statment
+      ai-statement
     }
   }
 }
@@ -197,7 +199,7 @@
   numbering: (equation: false, section: false),
   show-title: false,
   date: auto,
-  ai-statment: none,
+  ai-statement: none,
   body,
 ) = {
   show: minimal-setup.with(
@@ -208,7 +210,7 @@
     numbering: numbering,
     description: description,
     date: date,
-    ai-statment: ai-statment,
+    ai-statement: ai-statement,
   )
 
   let fit-to-width(body) = context {
@@ -360,7 +362,7 @@
   equation-numbering: false,
   bib: false,
   placement: none,
-  ai-statment: none,
+  ai-statement: none,
   grade: none,
   grade-feedback: none,
   body,
@@ -372,7 +374,7 @@
     bib: bib,
     placement: placement,
     description: [#course-number #course #homework-title],
-    ai-statment: ai-statment,
+    ai-statement: ai-statement,
   )
 
   align(center + horizon)[
@@ -381,15 +383,15 @@
       place(
         right,
         rotate(5deg, align(right)[
-            #text(fill: color-config.grade, weight: "bold", size: 2em)[#grade]
-            #if grade-feedback != none [
-              #text(fill: color-config.grade, size: 0.9em, style: "italic")[\ #grade-feedback]
-            ]
-          ])
+          #text(fill: color-config.grade, weight: "bold", size: 2em)[#grade]
+          #if grade-feedback != none [
+            #text(fill: color-config.grade, size: 0.9em, style: "italic")[\ #grade-feedback]
+          ]
+        ]),
       )
       v(0.8in)
     } else {
-    v(1in)
+      v(1in)
     }
     #title() \
     #v(0.1in)
@@ -401,7 +403,8 @@
     ] \
     #v(3in)
     #strong[#author] \
-    #datetime.today().display("[month repr:long] [day], [year]")
+    #get-now().display("[month repr:long] [day], [year]")
+    // #datetime.today().display("[month repr:long] [day], [year]")
     #metadata("title") <titlepage>
   ]
 

@@ -1,4 +1,4 @@
-#import "config.typ": __typ-utils, show-solutions, output-is-html, show-grades, color-config
+#import "config.typ": __typ-utils, color-config, output-is-html, show-grades, show-solutions
 
 #let problem(name: none, body) = {
   counter("problem").step()
@@ -6,7 +6,7 @@
 
   context {
     let count = counter("problem").display()
-    [= Problem #count#label("problem" + str(count))#{if name != none  [: #name]}]
+    [= Problem #count#label("problem" + str(count))#{ if name != none [: #name] }]
   }
   body
 }
@@ -49,12 +49,12 @@
 
 #let graded(score, feedback: none) = {
   if show-grades {
-  v(-1.5em)
-  pad(x: 2em, top: 0.5em, bottom: 0.5em)[
-    #text(size: 0.85em, fill: color-config.grade)[
-      #emph[#strong[Grade: #score] #feedback]
+    v(-1.5em)
+    pad(x: 2em, top: 0.5em, bottom: 0.5em)[
+      #text(size: 0.85em, fill: color-config.grade)[
+        #emph[#strong[Grade: #score] #feedback]
+      ]
     ]
-  ]
   }
 }
 
@@ -64,33 +64,38 @@
     supplement: supplement,
     numbering: numbering,
     outlined: true,
-   align(left, block(
-    width: 100%,
-    stroke: 0.5pt + color-config.at(kind),
-    inset: 1em,
-    fill: color-config.at(kind + "-fill"),
-    radius: 2pt,
-    breakable: true,
-  )[
-    #text(size: 0.85em)[
-      #strong[
-        #supplement#context {
-          if numbering != none {
-            " " + counter(figure.where(kind: kind)).display(numbering)
-        }
-      }:
-        #if title != none {
-        title
-        }
-      ] \
-      #body
-    ]
-  ]
-)
-)
+    align(left, block(
+      width: 100%,
+      stroke: 0.5pt + color-config.at(kind),
+      inset: 1em,
+      fill: color-config.at(kind + "-fill"),
+      radius: 2pt,
+      breakable: true,
+    )[
+      #text(size: 0.85em)[
+        #strong[
+          #supplement#context {
+            if numbering != none {
+              " " + counter(figure.where(kind: kind)).display(numbering)
+            }
+          }:
+          #if title != none {
+            title
+          }
+        ] \
+        #body
+      ]
+    ]),
+  )
 }
 
-#let example(numbering: "1", title: none, body) = generic-aside(numbering: numbering, supplement: "Example", kind: "example", title, body)
+#let example(numbering: "1", title: none, body) = generic-aside(
+  numbering: numbering,
+  supplement: "Example",
+  kind: "example",
+  title,
+  body,
+)
 #let theorem = generic-aside.with(supplement: "Theorem", kind: "theorem")
 #let define = generic-aside.with(supplement: "Definition", kind: "definition")
 #let formula = generic-aside.with(supplement: "Formula", kind: "formula")
@@ -105,7 +110,7 @@
 }
 
 #let todo-lorem(count) = {
-   context if output-is-html() {
+  context if output-is-html() {
     html.elem("div", attrs: (style: "color: red;"), lorem(count))
   } else {
     // warn("There's still work to do!")
@@ -151,7 +156,7 @@
 
 #let appendix(body, repeat-figures: false) = {
   pagebreak(weak: true)
-  set heading(numbering: "A.a", supplement: [Appendix])
+  set heading(numbering: "A.a:", supplement: [Appendix])
   counter(heading).update(0)
   body
   if repeat-figures {
@@ -448,10 +453,10 @@
 }
 
 #let display-bool(value) = {
-    if value {
-        [True]
-    } else {
-        [False]
-    }
+  if value {
+    [True]
+  } else {
+    [False]
+  }
 }
 

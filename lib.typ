@@ -23,7 +23,7 @@
 // Additionally WASM plugin function names will follow Rust and be snake_case
 // Internal typst variables are inconsistent and need to be fixed
 
-#import "config.typ": author, output-is-html, handout-mode, show-color, compile-host
+#import "config.typ": author, compile-host, handout-mode, output-is-html, show-color
 #import "units.typ"
 #import "symb.typ"
 #import "cooking.typ"
@@ -31,6 +31,7 @@
 #import "constants.typ"
 #import "circuits.typ"
 #import "keyboard.typ"
+#import "parser/parser.typ"
 #import "calendar/mod.typ": *
 #import "setups.typ": *
 #import "util.typ": *
