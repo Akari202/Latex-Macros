@@ -1,40 +1,80 @@
+#import "../config.typ": output-is-html
+
 #let cfg-joiner = "->"
 
-#let cfg(grammar) = {
-  set par(spacing: 1em)
-  block(
-    fill: gray.lighten(90%),
-    stroke: gray,
-    inset: (x: 8pt, y: 8pt),
-    radius: 2pt,
-    breakable: true,
-    align(left, for production in grammar
-      .pairs()
-      .map(i => {
-        let new = i
-          .at(1)
-          .map(j => {
-            (
-              "",
-              $|$,
-              if j.len() == 0 {
-                $epsilon$
-              } else {
-                eval(mode: "math", j.join(" "))
-              },
-            )
-          })
-        new.at(0).at(0) = eval(mode: "math", i.at(0))
-        new.at(0).at(1) = eval(mode: "math", cfg-joiner)
-        grid(
-          align: (right, right, left),
-          columns: 3,
-          inset: 0.2em,
-          ..new.flatten()
-        )
-      }) {
-      production
-    }),
+#let cfg(numbering: false, grammar) = {
+  let inner-block = {
+    set par(spacing: 1em)
+    block(
+      fill: gray.lighten(90%),
+      stroke: gray,
+      inset: (x: 8pt, y: 8pt),
+      radius: 2pt,
+      breakable: true,
+      align(left, for production in grammar
+        .pairs()
+        .map(i => {
+          let new = i
+            .at(1)
+            .map(j => {
+              (
+                "",
+                $|$,
+                if j.len() == 0 {
+                  $epsilon$
+                } else {
+                  eval(mode: "math", j.join(" "))
+                },
+              )
+            })
+          new.at(0).at(0) = eval(mode: "math", i.at(0))
+          new.at(0).at(1) = eval(mode: "math", cfg-joiner)
+          table(
+            align: (right, right, left),
+            columns: 3,
+            inset: 0.2em,
+            stroke: none,
+            ..new.flatten()
+          )
+        }) {
+        production
+      }),
+    )
+  }
+
+  let numbering-func = if numbering {
+    n => context {
+      std.numbering(
+        "(1.1)",
+        counter(heading.where(level: 1)).get().first(),
+        n,
+      )
+    }
+  } else {
+    return none
+  }
+
+  return figure(
+    kind: "grammar",
+    supplement: "Grammar",
+    numbering: numbering-func,
+    outlined: true,
+    table(
+      columns: if numbering { 2 } else { 1 },
+      align: if numbering { (center + horizon, left + horizon) } else { center + horizon },
+      inset: 0.2em,
+      stroke: none,
+      if output-is-html() {
+        html.div(class: "grammar", inner-block)
+      } else {
+        inner-block
+      },
+      if numbering != none {
+        context {
+          counter(figure.where(kind: "grammar")).display(numbering-func)
+        }
+      } else {},
+    ),
   )
 }
 

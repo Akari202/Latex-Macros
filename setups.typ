@@ -1,5 +1,21 @@
 #import "config.typ": author, color-config, output-is-html, show-grades, show-solutions
 #import "util.typ": get-now
+#import "util.typ"
+
+#let __merge-numberings(config, default: none) = {
+  let new = (equation: false, section: false, grammar: false, tiered: true)
+
+  if default != none {
+    for i in default.pairs() {
+      new.insert(..i)
+    }
+  }
+
+  for i in config.pairs() {
+    new.insert(..i)
+  }
+  return new
+}
 
 #let debug(body) = {
   set block(stroke: green + 0.2pt)
@@ -27,7 +43,29 @@
       }
     }
 
-    show align: it => html.elem("div", attrs: (style: "text-align: center;"), it.body)
+    show align: it => {
+      let a = it.alignment
+
+      let h = if a == left or a == left + top or a == left + horizon or a == left + bottom {
+        "left"
+      } else if a == right or a == right + top or a == right + horizon or a == right + bottom {
+        "right"
+      } else if a == center or a == center + top or a == center + horizon or a == center + bottom {
+        "center"
+      } else if a == end {
+        "end"
+      } else if a == start {
+        "start"
+      } else {
+        assert(false, message: "Unknown alignment")
+      }
+
+      html.elem(
+        "div",
+        it.body,
+        attrs: (style: "text-align: " + h + ";"),
+      )
+    }
 
     show image: it => {
       let width = if type(it.width) == relative {
@@ -76,7 +114,7 @@
   landscape: false,
   bib: false,
   placement: none,
-  numbering: (equation: false, section: false),
+  numbering: (:),
   slides: false,
   date: auto,
   description: none,
@@ -84,6 +122,8 @@
   body,
 ) = {
   show: html-compat
+
+  let numbering = __merge-numberings(numbering)
 
   set document(
     title: title,
@@ -127,6 +167,18 @@
   } else {
     none
   })
+
+  show heading.where(level: 1): it => {
+    if numbering.tiered {
+      counter(figure.where(kind: "aside")).update(0)
+      counter(figure.where(kind: "theorem")).update(0)
+      counter(figure.where(kind: "definition")).update(0)
+      counter(figure.where(kind: "formula")).update(0)
+      counter(figure.where(kind: "example")).update(0)
+      counter(figure.where(kind: "grammar")).update(0)
+    }
+    it
+  }
 
   set enum(numbering: "1.a.i.")
 
@@ -196,8 +248,9 @@
   footer-right: [],
   continuing-messages: true,
   description: none,
-  numbering: (equation: false, section: false),
+  numbering: (:),
   show-title: false,
+  title-outline: true,
   date: auto,
   ai-statement: none,
   body,
@@ -207,7 +260,7 @@
     bib: bib,
     margin: margin,
     placement: placement,
-    numbering: numbering,
+    numbering: __merge-numberings(numbering),
     description: description,
     date: date,
     ai-statement: ai-statement,
@@ -344,7 +397,9 @@
           } else { date }.display("[month repr:long] [day], [year]")
         )]\
       #line(length: 100%)\
-      #outline(depth: 2)
+      #if title-outline {
+        outline(depth: 2)
+      }
       #pagebreak()
     ]
   }
@@ -359,7 +414,7 @@
   instructor: "Professor Placeholder",
   class-time: "",
   due-date: "",
-  equation-numbering: false,
+  numbering: (:),
   bib: false,
   placement: none,
   ai-statement: none,
@@ -370,7 +425,7 @@
   show: setup.with(
     title: align(center + horizon)[#course-number \ #course \ #homework-title],
     header-center: [#course-number: #homework-title],
-    numbering: (equation: equation-numbering, section: false),
+    numbering: __merge-numberings(numbering),
     bib: bib,
     placement: placement,
     description: [#course-number #course #homework-title],

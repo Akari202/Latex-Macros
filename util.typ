@@ -58,11 +58,23 @@
   }
 }
 
-#let generic-aside(numbering: "1", supplement: "Aside", kind: "aside", title, body) = {
-  figure(
+#let generic-aside(numbering: true, supplement: "Aside", kind: "aside", title, body) = {
+  let numbering-func = if numbering {
+    n => context {
+      std.numbering(
+        "1.1",
+        counter(heading.where(level: 1)).get().first(),
+        n,
+      )
+    }
+  } else {
+    return none
+  }
+
+  return figure(
     kind: kind,
     supplement: supplement,
-    numbering: numbering,
+    numbering: numbering-func,
     outlined: true,
     align(left, block(
       width: 100%,
@@ -75,8 +87,10 @@
       #text(size: 0.85em)[
         #strong[
           #supplement#context {
-            if numbering != none {
-              " " + counter(figure.where(kind: kind)).display(numbering)
+            if numbering {
+              context {
+                " " + counter(figure.where(kind: kind)).display(numbering-func)
+              }
             }
           }:
           #if title != none {
@@ -89,7 +103,7 @@
   )
 }
 
-#let example(numbering: "1", title: none, body) = generic-aside(
+#let example(numbering: true, title: none, body) = generic-aside(
   numbering: numbering,
   supplement: "Example",
   kind: "example",
